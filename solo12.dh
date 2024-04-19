@@ -1,0 +1,19 @@
+DH Parameters: (markdown)
+|    | joint    | parent       | child        |        d |     theta |      r |    alpha |
+|---:|:---------|:-------------|:-------------|---------:|----------:|-------:|---------:|
+|  0 | FL_HAA   | base_link    | FL_SHOULDER  |  0       |   90.0002 | 0.0875 |  90.0002 |
+|  1 | FR_HAA   | base_link    | FR_SHOULDER  |  0       |  -90.0002 | 0.0875 | -90.0002 |
+|  2 | HL_HAA   | base_link    | HL_SHOULDER  |  0       |   90.0002 | 0.0875 |  90.0002 |
+|  3 | HR_HAA   | base_link    | HR_SHOULDER  |  0       |  -90.0002 | 0.0875 | -90.0002 |
+|  4 | FL_HFE   | FL_SHOULDER  | FL_UPPER_LEG |  0.1946  |   90.0002 | 0      |  90.0002 |
+|  5 | FR_HFE   | FR_SHOULDER  | FR_UPPER_LEG |  0.1946  |  -90.0002 | 0      |  90.0002 |
+|  6 | HL_HFE   | HL_SHOULDER  | HL_UPPER_LEG | -0.1946  |   90.0002 | 0      |  90.0002 |
+|  7 | HR_HFE   | HR_SHOULDER  | HR_UPPER_LEG | -0.1946  |  -90.0002 | 0      |  90.0002 |
+|  8 | FL_KFE   | FL_UPPER_LEG | FL_LOWER_LEG |  0.05145 | -180      | 0.16   |   0      |
+|  9 | FR_KFE   | FR_UPPER_LEG | FR_LOWER_LEG | -0.05145 |  180      | 0.16   |   0      |
+| 10 | HL_KFE   | HL_UPPER_LEG | HL_LOWER_LEG |  0.05145 | -180      | 0.16   |   0      |
+| 11 | HR_KFE   | HR_UPPER_LEG | HR_LOWER_LEG | -0.05145 |  180      | 0.16   |   0      |
+| 12 | FL_ANKLE | FL_LOWER_LEG | FL_FOOT      |  0.009   |   -0      | 0.16   |  90.0002 |
+| 13 | FR_ANKLE | FR_LOWER_LEG | FR_FOOT      | -0.009   |    0      | 0.16   |  90.0002 |
+| 14 | HL_ANKLE | HL_LOWER_LEG | HL_FOOT      |  0.009   |   -0      | 0.16   |  90.0002 |
+| 15 | HR_ANKLE | HR_LOWER_LEG | HR_FOOT      | -0.009   |    0      | 0.16   |  90.0002 |
