@@ -1,5 +1,7 @@
 # Testing the inverse_kinematics() function from solo.py with q_init initialization 
 # and better q_ref as initial solution for the solver and then applying it for all EE, each time redefining the specific q_ref to each EE
+# 
+# Problem: Converges but not necessarily into the same configuration
 import mujoco
 import mujoco.viewer as viewer
 import numpy as np
