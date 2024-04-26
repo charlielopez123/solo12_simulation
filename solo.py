@@ -56,7 +56,7 @@ class Robot:
         x = body.xpos.copy() # position of the EE (3D vector)
         R = np.reshape(body.xmat.copy(), (3,3)) # rotation matrix of the EE (3x3 matrix)
 
-        return x, R
+        return x
     
     def fk_jac(self, q=None, EE_name=None):
         if q is not None: 
