@@ -4,7 +4,7 @@ import numpy as np
 from solo import Robot
 from time import sleep
 import time
-from Joint_positions import EE_joints, key_points
+from Joint_positions import *
 
 class SoloSim:
   """
@@ -120,6 +120,10 @@ class SoloSim:
       q_ref: reference joint position from which the inverse kinematics are computed from, by default set as None
       EE_name: End-effector name from ["FL_FOOT", "FR_FOOT", "HL_FOOT", "HR_FOOT"], by default "FR_FOOT",
       q: current joint disposition before setting it to the robot
+
+    Returns:
+    q: solution returned by the solver for the joint positions to reach the EE to x_des position
+    success: True or False, whether the solver managed to converge towards a solution or not
     """
 
     if q_ref is None:
@@ -145,3 +149,16 @@ class SoloSim:
       for EE in key_points[situation]:
         #print(EE)
         self.visualize_point(key_points[situation][EE])
+
+  def get_joint_positions(self, EE):
+    """
+    Prints the positions of the chosen EE's corresponding joints with their names
+
+    Args:
+      EE : Chosen EE from which we want information on the corresponding joint positions
+    """
+
+    q = self.robot.get_q()
+    for joint in EE_joints[EE]:
+      print(f"Joint {name_joints[joint]} Position: {q[joint]}")
+    

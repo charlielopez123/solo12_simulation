@@ -1,4 +1,4 @@
-# Testing the inverse_kinematics() funtion from solo.py with q_init initialization
+# Testing the inverse_kinematics() on a single EE funtion from solo.py with q_init initialization a
 import mujoco
 import mujoco.viewer as viewer
 import numpy as np
@@ -23,10 +23,8 @@ FR_FOOT_pos = [ 0.15061846, -0.06616772,  0.35240609]
 sim.visualize_point(FL_FOOT_pos)
 #sim.visualize_point(FR_FOOT_pos)
 
-q = sim.robot.get_q()
 EE = 'FL_FOOT'
-for joint in EE_joints[EE]:
-    print(f"Joint {name_joints[joint]} Position: {q[joint]}")
+sim.get_joint_positions(EE)
 # Determine a q_ref that is close to the initial solution for with all the other EE at their current position
 q_ref = sim.robot.get_q()
 for joint in EE_joints[EE]:
@@ -38,5 +36,4 @@ print(f"for {EE}: {success}")
 
 #test obtained q
 sim.animate(np.array(q_ik), timed = True)
-for joint in EE_joints[EE]:
-    print(f"Joint {name_joints[joint]} Position: {q[joint]}")
+sim.get_joint_positions(EE)
