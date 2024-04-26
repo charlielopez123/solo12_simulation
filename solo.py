@@ -100,6 +100,7 @@ class Robot:
         nlc_pos = NonlinearConstraint(con_pos, -self.eps, self.eps, jac = con_pos_jac) # constrain the positional error between [-eps, eps]
         nlc = nlc_pos
         
+        #intitial solution for the solver
         x0 = q_ref.copy() + np.random.normal(size=12)*0.1 # noise added to initial position of the optimization problem as to avoid singularities
         res = minimize(fun_and_grad, # return c, dc: cost function and gradient
                        x0, #q_ref

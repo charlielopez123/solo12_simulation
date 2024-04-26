@@ -1,8 +1,12 @@
 import numpy as np
 
+# Corresponding joints for each End-Effector
 EE_joints = {'FL_FOOT': [0,1,2], 'FR_FOOT': [3,4,5], 'HL_FOOT': [6,7,8], 'HR_FOOT': [9,10,11]}
 
-# Define dictionary to store named robot poses
+# name of all the joints in the same order of the `Robot.data.qpos[:Robot.ndof]`
+name_joints = ['FL_HAA', 'FL_HFE', 'FL_KFE', 'FR_HAA', 'FR_HFE', 'FR_KFE', 'HL_HAA', 'HL_HFE', 'HL_KFE', 'HR_HAA', 'HR_HFE', 'HR_KFE']
+
+# Define dictionary to store named robot poses that can be used as reference point for the inverse kinematics function
 robot_poses = {
     #Initial rest pose
     "q_init": np.array([0, np.pi/2,  np.pi, 
