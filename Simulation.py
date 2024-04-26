@@ -133,12 +133,10 @@ class SoloSim:
       q = self.robot.get_q()
 
     noise = self.build_noise()
+
     for EE in EE_joints:
-      #print(f"q before {EE}")
       q_ik, success = self.robot.inverse_kinematics(x_des[EE], q_ref = q_ref, EE_name = EE, noise = noise)
       print(f"for {EE}: {success}")
-      #print(f"inv_kin for {EE}: {q_ik}, {success}")
-
       for i in EE_joints[EE]: # change the relevant joints of the EE
         q[i] = q_ik[i]
 
@@ -162,7 +160,6 @@ class SoloSim:
     q = self.robot.get_q()
     for joint in EE_joints[EE]:
       print(f"Joint {name_joints[joint]} Position: {q[joint]}")
-    
 
   def build_noise(self):
     # Build the noise array that we add to the x0 initial solution of th IK Solver

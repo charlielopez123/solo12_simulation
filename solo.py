@@ -92,7 +92,7 @@ class Robot:
         
         def con_pos(q): #position constraint
             #print(EE_name) #testing the value of EE_name
-            x, _ = self.fk_pose(q, EE_name)
+            x = self.fk_pose(q, EE_name)
             return x-x_des #position error
         def con_pos_jac(q):
             jac = self.fk_jac(q,EE_name)
@@ -108,6 +108,6 @@ class Robot:
                        jac=True, # If jac is a Boolean and is True, fun is assumed to return a tuple (f, g) containing the objective function and the gradient
                        bounds=self.bounds, #[robot.qmin, robot.qmax]
                        constraints=nlc, 
-                       options={'maxiter': 100, 'ftol': 1e-6, 'disp': True})
+                       options={'maxiter': 100, 'ftol': 1e-6, 'disp': False})
         return res.x, res.success
 
