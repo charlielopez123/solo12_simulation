@@ -104,8 +104,8 @@ class SoloSim:
       if geom_id == -1:
         print("Error creating geometry")
       else:
-        print(f"Point visualized with geometry ID")
         if verbose:
+          print(f"Point visualized with geometry ID")
           print({self.v.user_scn.geoms[id]})
         self.v.sync()
 
@@ -135,14 +135,14 @@ class SoloSim:
     noise = self.build_noise()
     for EE in EE_joints:
       #print(f"q before {EE}")
-      q_ik, success = self.robot.inverse_kinematics(x_des[EE], q_ref, EE_name = EE, noise = noise)
-      print(success, EE)
+      q_ik, success = self.robot.inverse_kinematics(x_des[EE], q_ref = q_ref, EE_name = EE, noise = noise)
+      print(f"for {EE}: {success}")
       #print(f"inv_kin for {EE}: {q_ik}, {success}")
 
       for i in EE_joints[EE]: # change the relevant joints of the EE
         q[i] = q_ik[i]
 
-    return q, success
+    return q
 
   def visualize_all_the_points(self):
     for situation in key_points:
