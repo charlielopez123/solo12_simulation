@@ -1,5 +1,5 @@
 # Testing the inverse_kinematics() function from solo.py with q_init initialization 
-# and better q_ref as initial solution for the solver and then applying it for all EE, each time redefining the specific q_ref to each EE
+# and better q_ref as the same initial solution for the solver and then applying it for all EE
 import mujoco
 import mujoco.viewer as viewer
 import numpy as np
@@ -27,25 +27,21 @@ sim.visualize_point(FR_FOOT_pos)
 # get current joint position to then later apply the solutions of the inverse kinematics function
 q = sim.robot.get_q()
 # Initialise q_ref to be at current position as to keep all other EEs to said current position
-q_ref = sim.robot.get_q()
-EE = 'FL_FOOT'
-for joint in EE_joints[EE]:
-        q_ref[joint] = robot_poses["q_arms_up"][joint]
+q_ref = robot_poses["q_arms_up"]
 
-q_ik, success = sim.robot.inverse_kinematics(FL_FOOT_pos, q_ref = q_ref, EE_name=EE)
+noise = sim.build_noise()
+
+EE = 'FL_FOOT'
+q_ik, success = sim.robot.inverse_kinematics(FL_FOOT_pos, q_ref = q_ref, EE_name=EE , noise = noise)
 print(f"for {EE}: {success}")
 for i in EE_joints[EE]: # change the relevant joints of the EE
         q[i] = q_ik[i]
 
 EE = 'FR_FOOT'
-q_ref = sim.robot.get_q()
-for joint in EE_joints[EE]:
-        q_ref[joint] = robot_poses["q_arms_up"][joint]
-q_ik, success = sim.robot.inverse_kinematics(FR_FOOT_pos, q_ref = q_ref, EE_name=EE)
+q_ik, success = sim.robot.inverse_kinematics(FR_FOOT_pos, q_ref = q_ref, EE_name=EE, noise = noise)
 print(f"for {EE}: {success}")
 for i in EE_joints[EE]: # change the relevant joints of the EE
         q[i] = q_ik[i]
-
 #print(q, success)
 
 #test obtained q

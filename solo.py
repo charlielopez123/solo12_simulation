@@ -78,7 +78,7 @@ class Robot:
         jac = np.concatenate((jac_pos[:, :len(q)], jac_rot[:, :len(q)]), axis=0)
         return jac
     
-    def inverse_kinematics(self, x_des, q_ref=None, EE_name= None):
+    def inverse_kinematics(self, x_des, q_ref=None, EE_name= None, noise = np.random.normal(size=12)*0.1):
         if EE_name is None:
             EE_name = self.FR_name
 
@@ -101,13 +101,13 @@ class Robot:
         nlc = nlc_pos
         
         #intitial solution for the solver
-        x0 = q_ref.copy() + np.random.normal(size=12)*0.1 # noise added to initial position of the optimization problem as to avoid singularities
+        x0 = q_ref.copy() + noise #+ np.random.normal(size=12)*0.1 # noise added to initial position of the optimization problem as to avoid singularities
         res = minimize(fun_and_grad, # return c, dc: cost function and gradient
                        x0, #q_ref
                        method='SLSQP', # SLSQP is ideal for mathematical problems for which the objective function and the constraints are twice continuously differentiable.
                        jac=True, # If jac is a Boolean and is True, fun is assumed to return a tuple (f, g) containing the objective function and the gradient
                        bounds=self.bounds, #[robot.qmin, robot.qmax]
                        constraints=nlc, 
-                       options={'maxiter': 100, 'ftol': 1e-6, 'disp': False})
+                       options={'maxiter': 100, 'ftol': 1e-6, 'disp': True})
         return res.x, res.success
 

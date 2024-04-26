@@ -132,9 +132,10 @@ class SoloSim:
     if q is None:
       q = self.robot.get_q()
 
+    noise = self.build_noise()
     for EE in EE_joints:
       #print(f"q before {EE}")
-      q_ik, success = self.robot.inverse_kinematics(x_des[EE], q_ref, EE_name = EE)
+      q_ik, success = self.robot.inverse_kinematics(x_des[EE], q_ref, EE_name = EE, noise = noise)
       print(success, EE)
       #print(f"inv_kin for {EE}: {q_ik}, {success}")
 
@@ -155,10 +156,24 @@ class SoloSim:
     Prints the positions of the chosen EE's corresponding joints with their names
 
     Args:
-      EE : Chosen EE from which we want information on the corresponding joint positions
+      EE : Chosen EE from which we want information on the corresponding
     """
 
     q = self.robot.get_q()
     for joint in EE_joints[EE]:
       print(f"Joint {name_joints[joint]} Position: {q[joint]}")
     
+
+  def build_noise(self):
+    # Build the noise array that we add to the x0 initial solution of th IK Solver
+    # We want a symmetric noise as to converge to a symmetric solution for both EE
+
+    # Generate three random normal numbers for additional noise given to an EE
+    random_numbers = np.random.normal(size=3) # [a, b,c]
+    random_numbers_negative = random_numbers * np.array([-1, 1, 1]) # [-a, b, c]
+
+    pattern = np.concatenate((random_numbers, random_numbers_negative)) # [a, b, c, -a, b, c]
+    #Build the noise array to add to each of the initial solution of the solver
+    noise = np.tile(pattern, 2)*0.1 # [a, b, c, -a, b, c, a, b, c, -a, b, c]
+
+    return noise
