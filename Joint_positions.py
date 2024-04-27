@@ -34,9 +34,12 @@ robot_poses = {
 }
 
 key_points = {
+
+    # left and right points of contact with the supposed box when held up
     "box_up": {"left": [0.15061844, 0.06616774, 0.35240609],
                 "right": [0.15061846, -0.06616772,  0.35240609]},
     
+    # left and right points of contact with the supposed box on the ground in front of the robot
     "box": {"left": [0.5, 0.06, 0.05],
             "right": [0.5, -0.06,  0.05]
     }
