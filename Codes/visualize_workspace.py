@@ -15,7 +15,7 @@ sim = SoloSim(q_init = q_init)
 q_min = np.zeros(12)
 q_max = 2*np.pi * np.ones(12)
 
-res = 15 #resolution
+res = 20 #resolution
 
 q_range = np.linspace(0, 2*np.pi, res) # (10, 3)
 q_range_mesh = np.array(np.meshgrid(q_range, q_range, q_range)) # (3, 10, 10, 10)
@@ -28,7 +28,7 @@ for i in range(res):
     for j in range(res):
         for k in range(res):
             x_FL[i, j, k] = sim.robot.fk_pose(q = q_range_mesh[i, j, k], EE_name = 'FL_FOOT')
-            sim.visualize_point(x_FL[i, j, k], rgba=np.array([0, 0, 1, 0.2]))
+            sim.visualize_point(x_FL[i, j, k], rgba=np.array([0, 0, 1, 0.8]))
 
 print(q_range_mesh[0, 0, 0])
 print(x_FL[0, 0, 0])
@@ -39,5 +39,5 @@ sim.animate(np.concatenate((q_comfortable, np.zeros(9))))
 sim.visualize_point(key_points["box"]["left"], rgba=np.array([1, 0, 0, 1]))
 sim.visualize_point(key_points["box"]["right"], rgba=np.array([1, 0, 0, 1]))
 
-while True:
-    time.sleep(1)
+# while True:
+#     time.sleep(1)

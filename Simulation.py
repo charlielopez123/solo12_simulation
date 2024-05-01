@@ -70,7 +70,7 @@ class SoloSim:
       positions["FR_FOOT"] = x
       return positions
 
-  def visualize_point(self, key_pos, verbose=False):
+  def visualize_point(self, key_pos, rgba=np.array([0.8, 0.3, 0.3, 0.5]), verbose=False):
       """
       Visualizes a point in the MuJoCo viewer.
 
@@ -95,7 +95,7 @@ class SoloSim:
         size=[sphere_radius, 0, 0],
         pos=key_pos,
         mat=np.eye(3).flatten(),  # Material properties (identity for now)
-        rgba=np.array([0.8, 0.3, 0.3, 0.5]),  # Reddish color with transparency
+        rgba=rgba,  # Reddish color with transparency
       )
       #v.user_scn.ngeom = id
       self.v.sync()
@@ -154,7 +154,7 @@ class SoloSim:
     Prints the positions of the chosen EE's corresponding joints with their names
 
     Args:
-      EE : Chosen EE from which we want information on the corresponding
+      EE : Chosen EE from which we want information on the corresponding joints
     """
 
     q = self.robot.get_q()
@@ -174,3 +174,28 @@ class SoloSim:
     noise = np.tile(pattern, 2)*0.1 # [a, b, c, -a, b, c, a, b, c, -a, b, c]
 
     return noise
+
+  def visualize_workspace(self, res = 10, rgba = np.array([0, 0, 1, 0.8]), EE_name = 'FL_FOOT'):
+    """
+    Visualizes a cloud of possible EE positions as to get a rough estimate of the EE's workspace
+
+    Args:
+      res: resolution of joint positional increments
+      rgba: rgb color and opacity of workspace points
+      EE_name : Chosen EE from which we want information on the corresponding workspace
+    """
+    q_min = np.zeros(12)
+    q_max = 2*np.pi * np.ones(12)
+
+    q_range = np.linspace(0, 2*np.pi, res) # (10, 3)
+    q_range_mesh = np.array(np.meshgrid(q_range, q_range, q_range)) # (3, 10, 10, 10)
+    # Reshape to (10, 10, 10, 3)
+    q_range_mesh = q_range_mesh.T # (10, 10, 10, 3)
+    print(q_range_mesh)
+
+    x_FL = np.zeros((res, res, res, 3))
+    for i in range(res):
+        for j in range(res):
+            for k in range(res):
+                x_FL[i, j, k] = self.robot.fk_pose(q = q_range_mesh[i, j, k], EE_name = EE_name)
+                self.visualize_point(x_FL[i, j, k], rgba=rgba)
