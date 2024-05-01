@@ -38,6 +38,3 @@ sim.animate(np.concatenate((q_comfortable, np.zeros(9))))
 
 sim.visualize_point(key_points["box"]["left"], rgba=np.array([1, 0, 0, 1]))
 sim.visualize_point(key_points["box"]["right"], rgba=np.array([1, 0, 0, 1]))
-
-# while True:
-#     time.sleep(1)
