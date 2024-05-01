@@ -40,7 +40,7 @@ key_points = {
                 "right": [0.15061846, -0.06616772,  0.35240609]},
     
     # left and right points of contact with the supposed box on the ground in front of the robot
-    "box": {"left": [0.5, 0.06, 0.05],
-            "right": [0.5, -0.06,  0.05]
+    "box": {"left": [0.4, 0.06, 0.05],
+            "right": [0.4, -0.06,  0.05]
     }
 }
