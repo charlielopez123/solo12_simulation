@@ -28,7 +28,3 @@ sim.get_hand_positions()
 #Hands on either side of box:
 #position of FL_FOOT: [0.50831553 0.09773597 0.10973119]
 #position of FR_FOOT: [ 0.50831553 -0.09773602  0.10973116]
-
-sim.workspace(res = 15)
-sim.visualize_point(key_points["box"]["left"])
-sim.visualize_point(key_points["box"]["right"])
