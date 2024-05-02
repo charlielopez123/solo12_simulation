@@ -63,10 +63,10 @@ class SoloSim:
       """
       positions = {}
       # FL_FOOT Position
-      x, _ = self.robot.fk_pose(q=self.robot.get_q(), EE_name="FL_FOOT")
+      x = self.robot.fk_pose(q=self.robot.get_q(), EE_name="FL_FOOT")
       positions["FL_FOOT"] = x
       # FR_FOOT Position
-      x, _ = self.robot.fk_pose(q=self.robot.get_q(), EE_name="FR_FOOT")
+      x = self.robot.fk_pose(q=self.robot.get_q(), EE_name="FR_FOOT")
       positions["FR_FOOT"] = x
       return positions
 
@@ -191,7 +191,6 @@ class SoloSim:
     q_range_mesh = np.array(np.meshgrid(q_range, q_range, q_range)) # (3, 10, 10, 10)
     # Reshape to (10, 10, 10, 3)
     q_range_mesh = q_range_mesh.T # (10, 10, 10, 3)
-    print(q_range_mesh)
 
     x_FL = np.zeros((res, res, res, 3))
     for i in range(res):
