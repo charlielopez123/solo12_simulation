@@ -142,7 +142,7 @@ class SoloSim:
 
     return q
 
-  def visualize_all_the_points(self):
+  def all_the_points(self):
     for situation in key_points:
       #print(situation)
       for EE in key_points[situation]:
@@ -171,11 +171,11 @@ class SoloSim:
 
     pattern = np.concatenate((random_numbers, random_numbers_negative)) # [a, b, c, -a, b, c]
     #Build the noise array to add to each of the initial solution of the solver
-    noise = np.tile(pattern, 2)*0.1 # [a, b, c, -a, b, c, a, b, c, -a, b, c]
+    noise = np.tile(pattern, 2)*0.01 # [a, b, c, -a, b, c, a, b, c, -a, b, c]
 
     return noise
 
-  def visualize_workspace(self, res = 10, rgba = np.array([0, 0, 1, 0.8]), EE_name = 'FL_FOOT'):
+  def workspace(self, res = 10, rgba = np.array([0, 0, 1, 0.8]), EE_name = 'FL_FOOT'):
     """
     Visualizes a cloud of possible EE positions as to get a rough estimate of the EE's workspace
 
@@ -184,8 +184,10 @@ class SoloSim:
       rgba: rgb color and opacity of workspace points
       EE_name : Chosen EE from which we want information on the corresponding workspace
     """
-    q_min = np.zeros(12)
-    q_max = 2*np.pi * np.ones(12)
+    # q_min = np.zeros(12)
+    # q_max = 2*np.pi * np.ones(12)
+    q_min = np.array([np.deg2rad(-75), -np.pi, -np.pi, np.deg2rad(-255), -np.pi, -np.pi, np.deg2rad(-75), -np.pi, -np.pi, np.deg2rad(-255), -np.pi, -np.pi])
+    q_max = np.array([np.deg2rad(255),  np.pi,  np.pi, np.deg2rad(75),    np.pi,  np.pi, np.deg2rad(255), np.pi, np.pi, np.deg2rad(75), np.pi, np.pi])
 
     q_range = np.linspace(0, 2*np.pi, res) # (10, 3)
     q_range_mesh = np.array(np.meshgrid(q_range, q_range, q_range)) # (3, 10, 10, 10)

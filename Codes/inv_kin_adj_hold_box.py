@@ -11,7 +11,7 @@ from Joint_positions import *
 q_init = robot_poses["q_init"]
 sim = SoloSim(q_init = q_init)
 
-sim.visualize_all_the_points()
+sim.all_the_points()
 
 q_ref= np.array([ (1-1/2)*np.pi/6, (3-1/2) * np.pi/2,  -2 *np.pi/12,
              -(1-1/2)*np.pi/6,  (3-1/2) * np.pi/2,  -2 *np.pi/12,
