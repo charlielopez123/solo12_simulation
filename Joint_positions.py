@@ -15,16 +15,23 @@ robot_poses = {
                           0, -np.pi/2,  np.pi]),
 
     #Front arms up
-    "q_arms_up": np.array([0, np.pi,  0, 
+    "q_arms_up_straight": np.array([0, np.pi,  0, 
                          0, np.pi,  0,
                          0, -np.pi/2,  np.pi,
                          0, -np.pi/2,  np.pi]),
 
     # Place front feet on either side of the box
-    "q_hands_on_box": np.array([np.pi/4, 3 * np.pi/2,  -np.pi/12,
+    "q_hands_on_box_elbows_bent_under": np.array([np.pi/4, 3 * np.pi/2,  -np.pi/12,
                              -np.pi/4, 3 * np.pi/2,  -np.pi/12,
                               0, -np.pi/2,  np.pi,
                               0, -np.pi/2,  np.pi]),
+
+    # Place front feet on either side of the box
+    "q_hands_on_box_elbows_bent_sideways": np.array([(1/2) * np.pi, -1/2 * np.pi,  -(1/12) * np.pi, 
+                                                    -(1/2) * np.pi, -1/2 * np.pi,  -(1/12) * np.pi,
+                                                    0, -np.pi/2,  np.pi,
+                                                    0, -np.pi/2,  np.pi]),
+
 
     # Final Position of Box in the air
     "q_hold_box_up": np.array([np.pi/12, np.pi,  -np.pi/12,
