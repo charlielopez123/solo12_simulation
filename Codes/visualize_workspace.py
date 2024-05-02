@@ -12,16 +12,19 @@ q_init = robot_poses["q_init"]
 sim = SoloSim(q_init = q_init)
 # robot = Robot(mujoco.MjModel.from_xml_path('scene.xml'), q_init = q_init)
 
-q_min = np.zeros(12)
-q_max = 2*np.pi * np.ones(12)
+#q_min = np.zeros(12)
+#q_max = 2*np.pi * np.ones(12)
+q_min = np.array([np.deg2rad(-75), -np.pi, -np.pi, np.deg2rad(-140), -np.pi, -np.pi, np.deg2rad(-75), -np.pi, -np.pi, np.deg2rad(-140), -np.pi, -np.pi])
+q_max = np.array([np.deg2rad(140),  np.pi,  np.pi, np.deg2rad(75),    np.pi,  np.pi, np.deg2rad(140), np.pi, np.pi, np.deg2rad(75), np.pi, np.pi])
 
-res = 20 #resolution
+res =  20#resolution
 
-q_range = np.linspace(0, 2*np.pi, res) # (10, 3)
-q_range_mesh = np.array(np.meshgrid(q_range, q_range, q_range)) # (3, 10, 10, 10)
+q_range_1 = np.linspace(q_min[0], q_max[0], res) # (10, 3)
+q_range_2 = np.linspace(q_min[1], q_max[1], res) # (10, 3)
+q_range_3 = np.linspace(q_min[2], q_max[2], res) # (10, 3)
+q_range_mesh = np.array(np.meshgrid(q_range_1, q_range_2, q_range_3)) # (3, 10, 10, 10)
 # Reshape to (10, 10, 10, 3)
 q_range_mesh = q_range_mesh.T # (10, 10, 10, 3)
-print(q_range_mesh)
 
 x_FL = np.zeros((res, res, res, 3))
 for i in range(res):
@@ -30,8 +33,6 @@ for i in range(res):
             x_FL[i, j, k] = sim.robot.fk_pose(q = q_range_mesh[i, j, k], EE_name = 'FL_FOOT')
             sim.visualize_point(x_FL[i, j, k], rgba=np.array([0, 0, 1, 0.8]))
 
-print(q_range_mesh[0, 0, 0])
-print(x_FL[0, 0, 0])
 
 q_comfortable = np.array([np.pi, np.pi/2, np.pi/2])
 sim.animate(np.concatenate((q_comfortable, np.zeros(9))))
