@@ -1,3 +1,4 @@
+# Animation of the front EEs placing them up in the air to then place them on each side of the hypothetical box in front
 import mujoco
 import mujoco.viewer as viewer
 import numpy as np
@@ -11,19 +12,19 @@ q_init = robot_poses["q_init"]
 sim = SoloSim(q_init = q_init)
 
 #Front arms up
-q = robot_poses["q_arms_up"]
+q = robot_poses["q_arms_up_straight"]
 
 sim.animate(q)
-print("q_init")
+print("q_arms_up_straight")
 sim.get_hand_positions()
 #position of FL_FOOT: [0.18811347 0.14797154 0.35292119]
 #position of FR_FOOT: [ 0.1881135  -0.14797147  0.35292121]
 
 # Place front feet on either side of the box
-q = robot_poses["q_hands_on_box"]
+q = robot_poses["q_hands_on_box_elbows_bent_sideways"]
 
 sim.animate(q)
-print("q_hands_on_box")
+print("q_hands_on_box_elbows_bent_sideways")
 sim.get_hand_positions()
 #Hands on either side of box:
 #position of FL_FOOT: [0.50831553 0.09773597 0.10973119]
