@@ -5,6 +5,7 @@ EE_joints = {'FL_FOOT': [0,1,2], 'FR_FOOT': [3,4,5], 'HL_FOOT': [6,7,8], 'HR_FOO
 
 # name of all the joints in the same order of the `Robot.data.qpos[:Robot.ndof]`
 name_joints = ['FL_HAA', 'FL_HFE', 'FL_KFE', 'FR_HAA', 'FR_HFE', 'FR_KFE', 'HL_HAA', 'HL_HFE', 'HL_KFE', 'HR_HAA', 'HR_HFE', 'HR_KFE']
+
 q_ref= np.array([ (1/12)*np.pi, (5/4) * np.pi,  -1/6 *np.pi,
              -(1/12)*np.pi,  (5/4) * np.pi,  -1/6 *np.pi,
                 0, -np.pi/2,  np.pi,
