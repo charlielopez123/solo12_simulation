@@ -14,21 +14,21 @@ q_ref= np.array([ (1/12)*np.pi, (5/4) * np.pi,  -1/6 *np.pi,
 robot_poses = {
     #Initial rest pose
     "q_init": np.array([0, np.pi/2,  np.pi, 
-                          0, np.pi/2,  np.pi,
-                          0, -np.pi/2,  np.pi,
-                          0, -np.pi/2,  np.pi]),
+                        0, np.pi/2,  np.pi,
+                        0, -np.pi/2,  np.pi,
+                        0, -np.pi/2,  np.pi]),
 
     #Front arms up
     "q_arms_up_straight": np.array([0, np.pi,  0, 
-                         0, np.pi,  0,
-                         0, -np.pi/2,  np.pi,
-                         0, -np.pi/2,  np.pi]),
+                        0, np.pi,  0,
+                        0, -np.pi/2,  np.pi,
+                        0, -np.pi/2,  np.pi]),
 
     # Place front feet on either side of the box
     "q_hands_on_box_elbows_bent_under": np.array([np.pi/4, 3 * np.pi/2,  -np.pi/12,
-                             -np.pi/4, 3 * np.pi/2,  -np.pi/12,
-                              0, -np.pi/2,  np.pi,
-                              0, -np.pi/2,  np.pi]),
+                                                -np.pi/4, 3 * np.pi/2,  -np.pi/12,
+                                                0, -np.pi/2,  np.pi,
+                                                0, -np.pi/2,  np.pi]),
 
     # Place front feet on either side of the box
     "q_hands_on_box_elbows_bent_sideways": np.array([(1/2) * np.pi, -1/2 * np.pi,  -(1/12) * np.pi, 
@@ -38,19 +38,23 @@ robot_poses = {
 
 
     # Final Position of Box in the air
-    "q_hold_box_up": np.array([np.pi/12, np.pi,  -np.pi/12,
-                             -np.pi/12, np.pi,  -np.pi/12,
-                              0, -np.pi/2,  np.pi,
-                              0, -np.pi/2,  np.pi]),
+    "q_hold_box_up": np.array([ 1.82599084e-01,  3.57812781e+00, -1.19878120e+00,
+                                -1.82599084e-01, 3.57812781e+00, -1.19878120e+00,
+                                -2.48085718e-04, -1.57092560e+00,3.14168012e+00,
+                                2.48085718e-04, -1.57092560e+00,  3.14168012e+00])
 }
 
 key_points = {
 
     # left and right points of contact with the supposed box when held up
-    "box_up": {"left": [0.15061844, 0.06616774, 0.35240609],
-                "right": [0.15061846, -0.06616772,  0.35240609]},
+    
+    "arms_up": {"left": [0.1946    , 0.14795   , 0.35299013],
+                "right": [ 0.1946    , -0.14795   ,  0.35299013]},
 
     "box_high": {"left": [0.45, 0.1, 0.15],
                 "right": [ 0.45, -0.1,  0.15]
-    }
+    },
+
+    "box_up": {"left": [0.15, 0.1, 0.3],
+                "right": [0.15, -0.1,  0.3]}
 }

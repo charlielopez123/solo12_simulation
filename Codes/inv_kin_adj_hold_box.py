@@ -13,21 +13,37 @@ sim = SoloSim(q_init = q_init)
 
 sim.all_the_points()
 
-x_des ={'FL_FOOT': key_points["box_up"]["left"],
-        'FR_FOOT': key_points["box_up"]["right"],
+
+#sim.animate(robot_poses["q_arms_up_straight"])
+#sim.get_hand_positions()
+
+target = key_points["arms_up"]
+x_des ={'FL_FOOT': target["left"],
+        'FR_FOOT': target["right"],
         'HL_FOOT': sim.robot.fk_pose(q=sim.robot.get_q(), EE_name="HL_FOOT"), #keep current EE position for Hind Legs
         'HR_FOOT': sim.robot.fk_pose(q=sim.robot.get_q(), EE_name="HR_FOOT")} #keep current EE position for Hind Legs
-
-#q = sim.inverse_kinematics_adjusted(x_des, q_ref = robot_poses["q_arms_up"])
 q = sim.inverse_kinematics_adjusted(x_des, q_ref = q_ref)
 sim.animate(q)
-#sim.animate(q_ref)
+
 target = key_points["box_high"]
 x_des ={'FL_FOOT': target["left"],
         'FR_FOOT': target["right"],
         'HL_FOOT': sim.robot.fk_pose(q=sim.robot.get_q(), EE_name="HL_FOOT"), #keep current EE position for Hind Legs
         'HR_FOOT': sim.robot.fk_pose(q=sim.robot.get_q(), EE_name="HR_FOOT")} #keep current EE position for Hind Legs
-
 q = sim.inverse_kinematics_adjusted(x_des, q_ref = q_ref)
-#q = sim.inverse_kinematics_adjusted(x_des, q_ref = q_ref)
 sim.animate(q)
+
+#sim.animate(q_ref)
+
+target = key_points["box_up"]
+x_des ={'FL_FOOT': target["left"],
+        'FR_FOOT': target["right"],
+        'HL_FOOT': sim.robot.fk_pose(q=sim.robot.get_q(), EE_name="HL_FOOT"), #keep current EE position for Hind Legs
+        'HR_FOOT': sim.robot.fk_pose(q=sim.robot.get_q(), EE_name="HR_FOOT")} #keep current EE position for Hind Legs
+q = sim.inverse_kinematics_adjusted(x_des, q_ref = robot_poses["q_hold_box_up"])
+sim.animate(q)
+
+
+
+
+#<key qpos='0.2447 4.12114 -0.60945 -0.2447 4.12114 -0.60945 2.94472e-05 -1.57079 3.14159 -2.94472e-05 -1.57079 3.14159'/>#
