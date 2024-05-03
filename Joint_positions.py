@@ -5,7 +5,10 @@ EE_joints = {'FL_FOOT': [0,1,2], 'FR_FOOT': [3,4,5], 'HL_FOOT': [6,7,8], 'HR_FOO
 
 # name of all the joints in the same order of the `Robot.data.qpos[:Robot.ndof]`
 name_joints = ['FL_HAA', 'FL_HFE', 'FL_KFE', 'FR_HAA', 'FR_HFE', 'FR_KFE', 'HL_HAA', 'HL_HFE', 'HL_KFE', 'HR_HAA', 'HR_HFE', 'HR_KFE']
-
+q_ref= np.array([ (1/12)*np.pi, (5/4) * np.pi,  -1/6 *np.pi,
+             -(1/12)*np.pi,  (5/4) * np.pi,  -1/6 *np.pi,
+                0, -np.pi/2,  np.pi,
+                0, -np.pi/2,  np.pi])
 # Define dictionary to store named robot poses that can be used as reference point for the inverse kinematics function
 robot_poses = {
     #Initial rest pose
@@ -45,9 +48,8 @@ key_points = {
     # left and right points of contact with the supposed box when held up
     "box_up": {"left": [0.15061844, 0.06616774, 0.35240609],
                 "right": [0.15061846, -0.06616772,  0.35240609]},
-    
-    # left and right points of contact with the supposed box on the ground in front of the robot
-    "box": {"left": [0.49, 0.043, 0.08],
-            "right": [0.49, -0.043, 0.08]
+
+    "box_high": {"left": [0.45, 0.1, 0.15],
+                "right": [ 0.45, -0.1,  0.15]
     }
 }

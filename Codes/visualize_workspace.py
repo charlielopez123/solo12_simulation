@@ -14,8 +14,9 @@ sim = SoloSim(q_init = q_init)
 
 #q_min = np.zeros(12)
 #q_max = 2*np.pi * np.ones(12)
-q_min = np.array([np.deg2rad(-75), -np.pi, -np.pi, np.deg2rad(-140), -np.pi, -np.pi, np.deg2rad(-75), -np.pi, -np.pi, np.deg2rad(-140), -np.pi, -np.pi])
-q_max = np.array([np.deg2rad(140),  np.pi,  np.pi, np.deg2rad(75),    np.pi,  np.pi, np.deg2rad(140), np.pi, np.pi, np.deg2rad(75), np.pi, np.pi])
+max = 255
+q_min = np.array([np.deg2rad(-75), -np.pi, -np.pi, np.deg2rad(-max), -np.pi, -np.pi, np.deg2rad(-75), -np.pi, -np.pi, np.deg2rad(-max), -np.pi, -np.pi])
+q_max = np.array([np.deg2rad(max),  np.pi,  np.pi, np.deg2rad(75),    np.pi,  np.pi, np.deg2rad(max), np.pi, np.pi, np.deg2rad(75), np.pi, np.pi])
 
 res =  20#resolution
 
