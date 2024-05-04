@@ -171,7 +171,7 @@ class SoloSim:
 
     pattern = np.concatenate((random_numbers, random_numbers_negative)) # [a, b, c, -a, b, c]
     #Build the noise array to add to each of the initial solution of the solver
-    noise = np.tile(pattern, 2)*0.01 # [a, b, c, -a, b, c, a, b, c, -a, b, c]
+    noise = np.tile(pattern, 2)*0.001 # [a, b, c, -a, b, c, a, b, c, -a, b, c]
 
     return noise
 
@@ -200,3 +200,20 @@ class SoloSim:
             for k in range(res):
                 x_FL[i, j, k] = self.robot.fk_pose(q = q_range_mesh[i, j, k], EE_name = EE_name)
                 self.visualize_point(x_FL[i, j, k], rgba=rgba)
+
+  def x_des(self, target):
+    """
+    Defines the x_des dictionary to define all the desired positions of the front EEs whilst keeping the Hind legs put
+
+    Args:
+        target: set of points of desired EE positions
+
+    Returns:
+    x_des: dictionary of the desired EEs positions
+    """
+    x_des ={'FL_FOOT': target["left"],
+        'FR_FOOT': target["right"],
+        'HL_FOOT': self.robot.fk_pose(q=self.robot.get_q(), EE_name="HL_FOOT"), #keep current EE position for Hind Legs
+        'HR_FOOT': self.robot.fk_pose(q=self.robot.get_q(), EE_name="HR_FOOT")} #keep current EE position for Hind Legs
+    
+    return x_des
