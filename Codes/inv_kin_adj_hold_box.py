@@ -14,10 +14,6 @@ sim = SoloSim(q_init = q_init)
 sim.all_the_points()
 
 
-#sim.animate(robot_poses["q_arms_up_straight"])
-#sim.get_hand_positions()
-
-
 x_des = sim.x_des(target = key_points["arms_up"])
 q = sim.inverse_kinematics_adjusted(x_des, q_ref = q_ref)
 sim.animate(q)
@@ -35,5 +31,6 @@ x_des = sim.x_des(target = key_points["box_up"])
 q = sim.inverse_kinematics_adjusted(x_des, q_ref = robot_poses["q_hold_box_up"])
 sim.animate(q)
 
-#box held up high correctly with right config
-#<key qpos='0.2447 4.12114 -0.60945 -0.2447 4.12114 -0.60945 2.94472e-05 -1.57079 3.14159 -2.94472e-05 -1.57079 3.14159'/>#
+x_des = sim.x_des(target = key_points["box_on_back"])
+q = sim.inverse_kinematics_adjusted(x_des, q_ref = q_ref)
+sim.animate(q)
