@@ -24,7 +24,11 @@ sim.animate(q)
 
 #sim.animate(q_ref)
 
-x_des = sim.x_des(target = key_points["via_point_lift_box"])
+x_des = sim.x_des(target = key_points["via_point1_lift_box"])
+q = sim.inverse_kinematics_adjusted(x_des, q_ref = q_ref)
+sim.animate(q)
+
+x_des = sim.x_des(target = key_points["via_point2_lift_box"])
 q = sim.inverse_kinematics_adjusted(x_des, q_ref = q_ref)
 sim.animate(q)
 

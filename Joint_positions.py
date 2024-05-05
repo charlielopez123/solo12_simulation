@@ -55,7 +55,11 @@ key_points = {
                 "right": [ 0.45, -0.1,  0.15]
     },
 
-    "via_point_lift_box": {"left": [0.3, 0.1, 0.26],
+    "via_point1_lift_box": {"left": [0.4, 0.1, 0.21],
+                        "right": [ 0.4, -0.1,  0.21]
+    },
+
+    "via_point2_lift_box": {"left": [0.3, 0.1, 0.26],
                         "right": [ 0.3, -0.1,  0.26]
     },
 
