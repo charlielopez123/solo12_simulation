@@ -5,6 +5,7 @@ from solo import Robot
 from time import sleep
 import time
 from Joint_positions import *
+from scipy.optimize import minimize
 
 class SoloSim:
   """
@@ -201,6 +202,54 @@ class SoloSim:
                 x_FL[i, j, k] = self.robot.fk_pose(q = q_range_mesh[i, j, k], EE_name = EE_name)
                 self.visualize_point(x_FL[i, j, k], rgba=rgba)
 
+  def velocity_profile(self, num_time_steps, full_duration, current, desired):
+    dt = full_duration/num_time_steps
+
+    # Define your objective function to minimize jerk
+    def objective_function(vars):
+
+        # Velocities
+        joint_velocities = vars
+
+        # Calculate jerk from velocities
+        jerk = np.diff(joint_velocities, axis=0, prepend=0, append=0, n=2)
+
+        # Calculate the integral of jerk
+        smoothness_measure = np.sum(np.abs(jerk))
+
+        return smoothness_measure
+    
+    list_of_constraints = [] 
+
+    # define all 12 of position constraints function for each joint
+    for i in range(12):
+        def constraint(vars, i = i): #https://stackoverflow.com/questions/3431676/creating-functions-or-lambdas-in-a-loop-or-comprehension
+            velocities = vars[i * num_time_steps : (i+1) * num_time_steps]
+            return current[i] + np.sum(velocities * dt) - desired[i]
+        list_of_constraints.append(constraint)
+
+    # Set up the list of nonlinear inequality constraint dictionaries
+    constraints = []
+    for i in range(12):
+        constraints.append({'type': 'eq', 'fun': list_of_constraints[i]})
+
+    # Initial guess for velocities and duration
+    initial_guess = np.zeros(12 * num_time_steps)  # Adjust based on your requirements
+    print(objective_function(initial_guess))
+
+    # Run the optimization
+    result = minimize(fun=objective_function, x0=initial_guess, method='SLSQP', constraints=constraints)
+    print(result)
+
+    # Extract the optimal velocities
+    optimal_velocities = []
+    for i in range(12):
+        optimal_velocities.append(result.x[i * num_time_steps : (i+1) * num_time_steps])
+        #print(f'optimal_velocities of {name_joints[i]}: {optimal_velocities[i]}')
+        print(f'{list_of_constraints[i](result.x)}')
+
+    return optimal_velocities
+
   def x_des(self, target):
     """
     Defines the x_des dictionary to define all the desired positions of the front EEs whilst keeping the Hind legs put
@@ -217,3 +266,40 @@ class SoloSim:
         'HR_FOOT': self.robot.fk_pose(q=self.robot.get_q(), EE_name="HR_FOOT")} #keep current EE position for Hind Legs
     
     return x_des
+
+  def speed_animate(self, q_2, q_1 = None, t_max = 3, num_time_steps = 10, timed=False):
+      """
+      Animates a transition between two robot joint configurations with a velocity profile.
+
+      Args:
+        q_1: Starting joint positions.
+        q_2: Ending joint positions.
+        t_max: Maximum simulation time.
+        dt: Time step for simulation.
+        timed: Whether to print the simulation time (optional).
+      """
+
+
+      dt = t_max/num_time_steps
+
+      if q_1 is None:
+        q_1 = self.robot.get_q()
+
+      optimal_velocities = self.velocity_profile(num_time_steps, t_max, q_1, q_2) # get optimal velocities for each joint
+
+      if timed:
+        start_time = time.time()
+
+      q = q_1
+      for i in range(num_time_steps):
+        velocities = [sub_array[i] for sub_array in optimal_velocities]
+        q += velocities
+        self.animate(q_2=q, t_max = dt, dt = dt/100)
+
+
+      if timed:
+        end_time = time.time()
+        simulation_time = end_time - start_time
+        print(f"Simulation time: {simulation_time:.2f} seconds")
+
+
