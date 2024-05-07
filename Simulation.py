@@ -294,5 +294,3 @@ class SoloSim:
         end_time = time.time()
         simulation_time = end_time - start_time
         print(f"Simulation time: {simulation_time:.2f} seconds")
-
-
