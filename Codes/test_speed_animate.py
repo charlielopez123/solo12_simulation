@@ -16,4 +16,4 @@ sim = SoloSim(q_init = q_init)
 #Front arms up
 q = robot_poses["q_arms_up_straight"]
 
-sim.speed_animate(q, num_time_steps= 2, t_max = 2,timed=True) # works: num_time_steps= 2, t_max = 2 
+sim.speed_animate(q, num_time_steps= 10, t_max = 3, timed=True) # works for (num_time_steps,t_max): (3,3) (4,4) (5,5)

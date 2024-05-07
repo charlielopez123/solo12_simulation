@@ -207,25 +207,19 @@ class SoloSim:
 
     # Define your objective function to minimize jerk
     def objective_function(vars):
+      smoothness_measure = 0
+      for i in range(12): #Get sum of jerk for each joint movement
+        velocities = vars[i * num_time_steps : (i+1) * num_time_steps]
+        jerk = np.diff(velocities, axis=0, prepend=0, append=0, n=2)
+        smoothness_measure += np.sum(np.abs(jerk))
+      return smoothness_measure
 
-        # Velocities
-        joint_velocities = vars
-
-        # Calculate jerk from velocities
-        jerk = np.diff(joint_velocities, axis=0, prepend=0, append=0, n=2)
-
-        # Calculate the integral of jerk
-        smoothness_measure = np.sum(np.abs(jerk))
-
-        return smoothness_measure
-    
     list_of_constraints = [] 
-
     # define all 12 of position constraints function for each joint
     for i in range(12):
         def constraint(vars, i = i): #https://stackoverflow.com/questions/3431676/creating-functions-or-lambdas-in-a-loop-or-comprehension
             velocities = vars[i * num_time_steps : (i+1) * num_time_steps]
-            return current[i] + np.sum(velocities * dt) - desired[i]
+            return current[i] + np.sum(velocities * dt) - desired[i] # Ensure joint reaches target position
         list_of_constraints.append(constraint)
 
     # Set up the list of nonlinear inequality constraint dictionaries
@@ -235,7 +229,6 @@ class SoloSim:
 
     # Initial guess for velocities and duration
     initial_guess = np.zeros(12 * num_time_steps)  # Adjust based on your requirements
-    print(objective_function(initial_guess))
 
     # Run the optimization
     result = minimize(fun=objective_function, x0=initial_guess, method='SLSQP', constraints=constraints)
@@ -275,7 +268,7 @@ class SoloSim:
         q_1: Starting joint positions.
         q_2: Ending joint positions.
         t_max: Maximum simulation time.
-        dt: Time step for simulation.
+        num_time_steps: number of time steps within the animation, each step with a different set of joint velocities
         timed: Whether to print the simulation time (optional).
       """
 
