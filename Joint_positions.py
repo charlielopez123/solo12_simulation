@@ -46,26 +46,47 @@ robot_poses = {
 
 key_points = {
 
-    # left and right points of contact with the supposed box when held up
-    
-    "arms_up": {"left": [0.1946    , 0.14795   , 0.35299013],
-                "right": [ 0.1946    , -0.14795   ,  0.35299013]},
+#Lift arms up
+    "arms_up": {'pos': {"left": [0.1946    , 0.14795   , 0.35299013],
+                        "right": [ 0.1946    , -0.14795   ,  0.35299013]}, 
+                        'rgba': [1, 0, 0, 0.5]
+                },
 
-    "box_high": {"left": [0.45, 0.1, 0.15],
-                "right": [ 0.45, -0.1,  0.15]
+#Get to box contact points
+    "via_point1_get2box":{'pos': {"left": [0.3, 0.12, 0.3],
+                                "right": [ 0.3, -0.12,  0.3]},
+                                'rgba': [1, 0, 0, 0.5]
+                },
+
+    "via_point2_get2box":{'pos': {"left": [0.4, 0.11, 0.25],
+                        "right": [ 0.4, -0.11,  0.25]},
+                        'rgba': [1, 0, 0, 0.5]
     },
 
-    "via_point1_lift_box": {"left": [0.4, 0.1, 0.21],
-                        "right": [ 0.4, -0.1,  0.21]
+    "box_high": {'pos': {"left": [0.45, 0.1, 0.15],
+                "right": [ 0.45, -0.1,  0.15]},
+                'rgba': [0, 1, 0, 0.5]
     },
 
-    "via_point2_lift_box": {"left": [0.3, 0.1, 0.26],
-                        "right": [ 0.3, -0.1,  0.26]
+#Lift the box up
+    "via_point1_lift_box": {'pos': {"left": [0.4, 0.1, 0.21],
+                        "right": [ 0.4, -0.1,  0.21]},
+                        'rgba': [0, 1, 0, 0.5]
     },
 
-    "box_up": {"left": [0.15, 0.1, 0.3],
+    "via_point2_lift_box": {'pos': {"left": [0.3, 0.1, 0.26],
+                        "right": [ 0.3, -0.1,  0.26]},
+                        'rgba': [0, 1, 0, 0.5]
+    },
+
+    "box_up": {'pos': {"left": [0.15, 0.1, 0.3],
                 "right": [0.15, -0.1,  0.3]},
+                'rgba': [0, 1, 0, 0.5]
+                },
 
-    "box_on_back":{"left": [0, 0.1, 0.033 + 0.15],
-                "right": [0, -0.1,  0.033 + 0.15]}
+#Bring box back down
+    "box_on_back":{'pos':{"left": [0, 0.1, 0.033 + 0.15],
+                "right": [0, -0.1,  0.033 + 0.15]},
+                'rgba': [0, 0, 1, 0.5]
+                }
 }

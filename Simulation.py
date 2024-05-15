@@ -145,10 +145,9 @@ class SoloSim:
 
   def all_the_points(self):
     for situation in key_points:
-      #print(situation)
-      for EE in key_points[situation]:
-        #print(EE)
-        self.visualize_point(key_points[situation][EE])
+      rgba = key_points[situation]['rgba']
+      for EE in key_points[situation]['pos']:
+        self.visualize_point(key_points[situation]['pos'][EE], rgba)
 
   def get_joint_positions(self, EE):
     """
@@ -253,8 +252,8 @@ class SoloSim:
     Returns:
     x_des: dictionary of the desired EEs positions
     """
-    x_des ={'FL_FOOT': target["left"],
-        'FR_FOOT': target["right"],
+    x_des ={'FL_FOOT': target['pos']["left"],
+        'FR_FOOT': target['pos']["right"],
         'HL_FOOT': self.robot.fk_pose(q=self.robot.get_q(), EE_name="HL_FOOT"), #keep current EE position for Hind Legs
         'HR_FOOT': self.robot.fk_pose(q=self.robot.get_q(), EE_name="HR_FOOT")} #keep current EE position for Hind Legs
     

@@ -18,11 +18,17 @@ x_des = sim.x_des(target = key_points["arms_up"])
 q = sim.inverse_kinematics_adjusted(x_des, q_ref = q_ref)
 sim.animate(q)
 
-x_des = sim.x_des(target = key_points["box_high"])
+x_des = sim.x_des(target = key_points["via_point1_get2box"])
 q = sim.inverse_kinematics_adjusted(x_des, q_ref = q_ref)
 sim.animate(q)
 
-#sim.animate(q_ref)
+x_des = sim.x_des(target = key_points["via_point2_get2box"])
+q = sim.inverse_kinematics_adjusted(x_des, q_ref = q_ref)
+sim.animate(q)
+
+x_des = sim.x_des(target = key_points["box_high"])
+q = sim.inverse_kinematics_adjusted(x_des, q_ref = q_ref)
+sim.animate(q)
 
 x_des = sim.x_des(target = key_points["via_point1_lift_box"])
 q = sim.inverse_kinematics_adjusted(x_des, q_ref = q_ref)
