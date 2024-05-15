@@ -22,8 +22,6 @@ x_des = sim.x_des(target = key_points["box_high"])
 q = sim.inverse_kinematics_adjusted(x_des, q_ref = q_ref)
 sim.speed_animate(q, num_time_steps= 3, t_max = 3,timed=True)
 
-#sim.animate(q_ref)
-
 x_des = sim.x_des(target = key_points["via_point1_lift_box"])
 q = sim.inverse_kinematics_adjusted(x_des, q_ref = q_ref)
 sim.speed_animate(q, num_time_steps= 3, t_max = 3,timed=True)
