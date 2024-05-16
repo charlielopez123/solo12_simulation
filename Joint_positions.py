@@ -18,6 +18,11 @@ robot_poses = {
                         0, -np.pi/2,  np.pi,
                         0, -np.pi/2,  np.pi]),
 
+    "q_arms_up_halfway": np.array([ 5.95874546e-06,  2.11708770e+00,  2.04899798e+00,
+                                -5.95798805e-06, 2.11708771e+00,  2.04899797e+00,
+                                0.00000000e+00, -1.57079633e+00, 3.14159265e+00,
+                                0.00000000e+00, -1.57079633e+00,  3.14159265e+00]),
+
     #Front arms up
     "q_arms_up_straight": np.array([0, np.pi,  0, 
                         0, np.pi,  0,
@@ -47,46 +52,89 @@ robot_poses = {
 key_points = {
 
 #Lift arms up
+    "initial_pos": {'pos': {"left": [0.1946    , 0.14795   , 0.03],
+                        "right": [ 0.1946    , -0.14795   ,  0.03]}, 
+                        'rgba': [0.5, 0.2, 0.3, 0.5],
+                        'q_ref': robot_poses["q_init"]
+                },
+    
+    "arms_up_halfway": {'pos': {"left": [0.1946    , 0.14795   , 0.2],
+                        "right": [ 0.1946    , -0.14795   ,  0.2]}, 
+                        'rgba': [0.5, 0.2, 0.3, 0.5],
+                        'q_ref': robot_poses["q_arms_up_halfway"]
+                },
+
     "arms_up": {'pos': {"left": [0.1946    , 0.14795   , 0.35299013],
                         "right": [ 0.1946    , -0.14795   ,  0.35299013]}, 
-                        'rgba': [1, 0, 0, 0.5]
+                        'rgba': [0.5, 0.2, 0.3, 0.5],
+                        'q_ref': robot_poses["q_arms_up_halfway"]
                 },
 
 #Get to box contact points
     "via_point1_get2box":{'pos': {"left": [0.3, 0.12, 0.3],
                                 "right": [ 0.3, -0.12,  0.3]},
-                                'rgba': [1, 0, 0, 0.5]
+                                'rgba': [1, 0, 0, 0.5],
+                                'q_ref': q_ref
                 },
 
     "via_point2_get2box":{'pos': {"left": [0.4, 0.11, 0.25],
                         "right": [ 0.4, -0.11,  0.25]},
-                        'rgba': [1, 0, 0, 0.5]
+                        'rgba': [1, 0, 0, 0.5],
+                        'q_ref': q_ref
     },
 
     "box_high": {'pos': {"left": [0.45, 0.1, 0.15],
                 "right": [ 0.45, -0.1,  0.15]},
-                'rgba': [0, 1, 0, 0.5]
+                'rgba': [0, 1, 0, 0.5],
+                'q_ref': q_ref
     },
 
 #Lift the box up
     "via_point1_lift_box": {'pos': {"left": [0.4, 0.1, 0.21],
                         "right": [ 0.4, -0.1,  0.21]},
-                        'rgba': [0, 1, 0, 0.5]
+                        'rgba': [0, 1, 0, 0.5],
+                        'q_ref': q_ref
     },
 
     "via_point2_lift_box": {'pos': {"left": [0.3, 0.1, 0.26],
                         "right": [ 0.3, -0.1,  0.26]},
-                        'rgba': [0, 1, 0, 0.5]
+                        'rgba': [0, 1, 0, 0.5],
+                        'q_ref': q_ref
     },
 
     "box_up": {'pos': {"left": [0.15, 0.1, 0.3],
                 "right": [0.15, -0.1,  0.3]},
-                'rgba': [0, 1, 0, 0.5]
+                'rgba': [0, 1, 0, 0.5],
+                'q_ref': q_ref
                 },
 
 #Bring box back down
     "box_on_back":{'pos':{"left": [0, 0.1, 0.033 + 0.15],
                 "right": [0, -0.1,  0.033 + 0.15]},
-                'rgba': [0, 0, 1, 0.5]
+                'rgba': [0, 0, 1, 0.5],
+                'q_ref': q_ref
                 }
+}
+
+key_movements = {
+
+    "lift_arms": [
+    key_points["initial_pos"],
+    key_points["arms_up_halfway"],
+    key_points["arms_up"]
+    ],
+
+    "get2box": [
+    key_points["arms_up"],
+    key_points["via_point1_get2box"],
+    key_points["via_point2_get2box"],
+    key_points["box_high"]
+    ],
+
+    "lift_box": [
+    key_points["box_high"],
+    key_points["via_point1_lift_box"],
+    key_points["via_point2_lift_box"],
+    key_points["box_up"]
+    ]
 }
