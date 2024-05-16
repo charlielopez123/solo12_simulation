@@ -6,10 +6,12 @@ EE_joints = {'FL_FOOT': [0,1,2], 'FR_FOOT': [3,4,5], 'HL_FOOT': [6,7,8], 'HR_FOO
 # name of all the joints in the same order of the `Robot.data.qpos[:Robot.ndof]`
 name_joints = ['FL_HAA', 'FL_HFE', 'FL_KFE', 'FR_HAA', 'FR_HFE', 'FR_KFE', 'HL_HAA', 'HL_HFE', 'HL_KFE', 'HR_HAA', 'HR_HFE', 'HR_KFE']
 
+# General reference used for IK Computations
 q_ref= np.array([ (1/12)*np.pi, (5/4) * np.pi,  -1/6 *np.pi,
              -(1/12)*np.pi,  (5/4) * np.pi,  -1/6 *np.pi,
                 0, -np.pi/2,  np.pi,
                 0, -np.pi/2,  np.pi])
+
 # Define dictionary to store named robot poses that can be used as reference point for the inverse kinematics function
 robot_poses = {
     #Initial rest pose
@@ -46,7 +48,12 @@ robot_poses = {
     "q_hold_box_up": np.array([ 1.82599084e-01,  3.57812781e+00, -1.19878120e+00,
                                 -1.82599084e-01, 3.57812781e+00, -1.19878120e+00,
                                 -2.48085718e-04, -1.57092560e+00,3.14168012e+00,
-                                2.48085718e-04, -1.57092560e+00,  3.14168012e+00])
+                                2.48085718e-04, -1.57092560e+00,  3.14168012e+00]),
+
+    "q_box_on_back": np.array([ 0.32631274,  1.4666653 ,  1.45947616,
+                                -0.32631274,  1.4666653 ,1.45947616,
+                                0.        , -1.57079633,  3.14159265,
+                                0.        ,-1.57079633,  3.14159265])
 }
 
 key_points = {
@@ -109,10 +116,16 @@ key_points = {
                 },
 
 #Bring box back down
+    "box_on_back_halfway":{'pos':{"left": [0.05, 0.1, 0.033 + 0.25],
+                "right": [0.05, -0.1,  0.033 + 0.25]},
+                'rgba': [0, 0, 1, 0.5],
+                'q_ref': robot_poses["q_box_on_back"]
+                },
+
     "box_on_back":{'pos':{"left": [0, 0.1, 0.033 + 0.15],
                 "right": [0, -0.1,  0.033 + 0.15]},
                 'rgba': [0, 0, 1, 0.5],
-                'q_ref': q_ref
+                'q_ref': robot_poses["q_box_on_back"]
                 }
 }
 
@@ -136,5 +149,12 @@ key_movements = {
     key_points["via_point1_lift_box"],
     key_points["via_point2_lift_box"],
     key_points["box_up"]
-    ]
+    ],
+
+    "box2back": [
+    key_points["box_up"],
+    key_points['box_on_back_halfway'],
+    key_points["box_on_back"]
+    ],
+
 }

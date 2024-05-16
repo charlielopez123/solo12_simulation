@@ -13,38 +13,47 @@ sim = SoloSim(q_init = q_init)
 
 sim.all_the_points()
 
-x_des = sim.x_des(target = key_points["arms_up_halfway"])
-q = sim.inverse_kinematics_adjusted(x_des, q_ref = robot_poses["q_arms_up_halfway"])
-sim.animate(q)
+for_loop = True
 
-x_des = sim.x_des(target = key_points["arms_up"])
-q = sim.inverse_kinematics_adjusted(x_des, q_ref = robot_poses["q_arms_up_halfway"])
-sim.animate(q)
+if for_loop:
+    for pt in key_points:
+        x_des = sim.x_des(target = key_points[pt])
+        q = sim.inverse_kinematics_adjusted(x_des, q_ref = key_points[pt]['q_ref'])
+        sim.animate(q, t_max=0.5)
 
-x_des = sim.x_des(target = key_points["via_point1_get2box"])
-q = sim.inverse_kinematics_adjusted(x_des, q_ref = q_ref)
-sim.animate(q)
+else:
+    x_des = sim.x_des(target = key_points["arms_up_halfway"])
+    q = sim.inverse_kinematics_adjusted(x_des, q_ref = robot_poses["q_arms_up_halfway"])
+    sim.animate(q)
 
-x_des = sim.x_des(target = key_points["via_point2_get2box"])
-q = sim.inverse_kinematics_adjusted(x_des, q_ref = q_ref)
-sim.animate(q)
+    x_des = sim.x_des(target = key_points["arms_up"])
+    q = sim.inverse_kinematics_adjusted(x_des, q_ref = robot_poses["q_arms_up_halfway"])
+    sim.animate(q)
 
-x_des = sim.x_des(target = key_points["box_high"])
-q = sim.inverse_kinematics_adjusted(x_des, q_ref = q_ref)
-sim.animate(q)
+    x_des = sim.x_des(target = key_points["via_point1_get2box"])
+    q = sim.inverse_kinematics_adjusted(x_des, q_ref = q_ref)
+    sim.animate(q)
 
-x_des = sim.x_des(target = key_points["via_point1_lift_box"])
-q = sim.inverse_kinematics_adjusted(x_des, q_ref = q_ref)
-sim.animate(q)
+    x_des = sim.x_des(target = key_points["via_point2_get2box"])
+    q = sim.inverse_kinematics_adjusted(x_des, q_ref = q_ref)
+    sim.animate(q)
 
-x_des = sim.x_des(target = key_points["via_point2_lift_box"])
-q = sim.inverse_kinematics_adjusted(x_des, q_ref = q_ref)
-sim.animate(q)
+    x_des = sim.x_des(target = key_points["box_high"])
+    q = sim.inverse_kinematics_adjusted(x_des, q_ref = q_ref)
+    sim.animate(q)
 
-x_des = sim.x_des(target = key_points["box_up"])
-q = sim.inverse_kinematics_adjusted(x_des, q_ref = robot_poses["q_hold_box_up"])
-sim.animate(q)
+    x_des = sim.x_des(target = key_points["via_point1_lift_box"])
+    q = sim.inverse_kinematics_adjusted(x_des, q_ref = q_ref)
+    sim.animate(q)
 
-x_des = sim.x_des(target = key_points["box_on_back"])
-q = sim.inverse_kinematics_adjusted(x_des, q_ref = q_ref)
-sim.animate(q)
+    x_des = sim.x_des(target = key_points["via_point2_lift_box"])
+    q = sim.inverse_kinematics_adjusted(x_des, q_ref = q_ref)
+    sim.animate(q)
+
+    x_des = sim.x_des(target = key_points["box_up"])
+    q = sim.inverse_kinematics_adjusted(x_des, q_ref = robot_poses["q_hold_box_up"])
+    sim.animate(q)
+
+    x_des = sim.x_des(target = key_points["box_on_back"])
+    q = sim.inverse_kinematics_adjusted(x_des, q_ref = q_ref)
+    sim.animate(q)
