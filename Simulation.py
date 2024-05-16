@@ -367,7 +367,7 @@ class SoloSim:
 
       q = q_1
       for i in range(num_time_steps):
-        velocities = [sub_array[i] for sub_array in optimal_velocities]
+        velocities = optimal_velocities[i]
         q += velocities*dt
         self.animate(q_2=q, t_max = dt, dt = dt/2) #animate till the next time step with a resolution of two
 

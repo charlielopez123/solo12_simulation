@@ -26,26 +26,4 @@ points = [
     key_points["via_point2_get2box"],
     key_points["box_high"]
     ]
-timed = True
-
-N_samples = len(points)
-num_time_steps = 100
-t_max, optimal_velocities = sim.TOPPRA(N_samples, points)
-print(f'duration: {t_max}')
-#print(f'optimal_velocities: {optimal_velocities}')
-
-
-dt = t_max/num_time_steps
-print(f'dt: {dt}')
-q_1 = sim.robot.get_q()
-if timed:
-    start_time = time.time()
-q = q_1
-for i in range(num_time_steps):
-    velocities = optimal_velocities[i]
-    q += velocities*dt
-    sim.animate(q_2=q, t_max = dt, dt = dt/2)
-if timed:
-    end_time = time.time()
-    simulation_time = end_time - start_time
-    print(f'time: {simulation_time}')
+sim.TOPPRA_speed_animate(points, timed = True)
