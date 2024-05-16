@@ -360,8 +360,7 @@ class SoloSim:
       t_max, optimal_velocities = self.TOPPRA(N_samples, points)
       dt = t_max/num_time_steps
 
-      if q_1 is None:
-        q_1 = self.robot.get_q()
+      q_1 = self.robot.get_q()
 
       if timed:
         start_time = time.time()
@@ -369,8 +368,8 @@ class SoloSim:
       q = q_1
       for i in range(num_time_steps):
         velocities = [sub_array[i] for sub_array in optimal_velocities]
-        q += velocities
-        self.animate(q_2=q, t_max = dt, dt = dt/100)
+        q += velocities*dt
+        self.animate(q_2=q, t_max = dt, dt = dt/2) #animate till the next time step with a resolution of two
 
       if timed:
         end_time = time.time()
