@@ -13,7 +13,8 @@ class SoloSim:
   """
 
   def __init__(self,
-             q_init=None):
+            q_init=None,
+            launch_viewer = True):
     """
     Initializes the simulation environment.
 
@@ -26,7 +27,8 @@ class SoloSim:
     self.robot = Robot(self.model, q_init)
 
     # Launch viewer
-    self.v = viewer.launch_passive(self.robot.model, self.robot.data)
+    if launch_viewer:
+      self.v = viewer.launch_passive(self.robot.model, self.robot.data)
 
   def animate(self, q_2, q_1 = None, t_max = 2, dt = 0.01, timed=False):
       """
