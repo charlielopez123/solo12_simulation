@@ -151,6 +151,9 @@ class SoloSim:
     return q
 
   def all_the_points(self):
+    """
+    Visualize all the points in the viewer
+    """
     for situation in key_points:
       rgba = key_points[situation]['rgba']
       for EE in key_points[situation]['pos']:
@@ -321,7 +324,7 @@ class SoloSim:
 
     for i in range(N_samples):
       x_des = self.x_des(target = points[i])
-      q = self.inverse_kinematics_adjusted(x_des, q_ref = q_ref)
+      q = self.inverse_kinematics_adjusted(x_des, q_ref = points[i]['q_ref']) # Use the appropriate q_ref for the IK computation
       way_pts.append(q.tolist())
 
     # Define the geometric path and two constraints.
