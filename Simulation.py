@@ -7,6 +7,12 @@ import time
 from Joint_positions import *
 from scipy.optimize import minimize
 
+import toppra as ta
+import toppra.constraint as constraint
+import toppra.algorithm as algo
+import numpy as np
+import matplotlib.pyplot as plt
+
 class SoloSim:
   """
   A class for simulating a Solo robot in a MuJoCo environment.
@@ -295,3 +301,78 @@ class SoloSim:
         end_time = time.time()
         simulation_time = end_time - start_time
         print(f"Simulation time: {simulation_time:.2f} seconds")
+
+  def TOPPRA(self, N_samples, points):
+    """
+    Defines the x_des dictionary to define all the desired positions of the front EEs whilst keeping the Hind legs put
+
+    Args:
+        N_samples: Number of points in the path
+        points: array of the different via_points of the EE's path
+
+    Returns:
+    x_des: dictionary of the desired EEs positions
+    """
+
+    dof = 12
+    way_pts = []
+    ss = np.linspace(0, 1, N_samples)
+    vlims = np.ones(dof)*4 #Velocity constraints defined to be 4 rad/s
+    alims = np.ones(dof)*5 #Acceleration constraints defined to be 5 rad/s^2
+
+    for i in range(N_samples):
+      x_des = self.x_des(target = points[i])
+      q = self.inverse_kinematics_adjusted(x_des, q_ref = q_ref)
+      way_pts.append(q.tolist())
+
+    # Define the geometric path and two constraints.
+    path = ta.SplineInterpolator(ss, way_pts)
+    pc_vel = constraint.JointVelocityConstraint(vlims)
+    pc_acc = constraint.JointAccelerationConstraint(alims)
+
+    # We solve the parametrization problem using the
+    # `ParametrizeConstAccel` parametrizer. This parametrizer is the
+    # classical solution, guarantee constraint and boundary conditions
+    # satisfaction.
+    instance = algo.TOPPRA([pc_vel, pc_acc], path, parametrizer="ParametrizeConstAccel")
+    jnt_traj = instance.compute_trajectory()
+
+    ################################################################################
+    # The output trajectory is an instance of
+    # :class:`toppra.interpolator.AbstractGeometricPath`.
+    ts_sample = np.linspace(0, jnt_traj.duration, 100)
+    qs_sample = jnt_traj(ts_sample) # ("Position (rad)")
+    qds_sample = jnt_traj(ts_sample, 1) #("Velocity (rad/s)")
+    qdds_sample = jnt_traj(ts_sample, 2) #("Acceleration (rad/s2)")
+    ################################################################################
+
+    return jnt_traj.duration, qds_sample
+
+  def TOPPRA_speed_animate(self, points, timed=False):
+      """
+      Animates a transition between two robot joint configurations with a velocity profile.
+
+      Args:
+        points: array of the different via_points for the given movement
+      """
+
+      N_samples = len(points)
+      num_time_steps = 100
+      t_max, optimal_velocities = self.TOPPRA(N_samples, points)
+      dt = t_max/num_time_steps
+
+      if q_1 is None:
+        q_1 = self.robot.get_q()
+
+      if timed:
+        start_time = time.time()
+
+      q = q_1
+      for i in range(num_time_steps):
+        velocities = [sub_array[i] for sub_array in optimal_velocities]
+        q += velocities
+        self.animate(q_2=q, t_max = dt, dt = dt/100)
+
+      if timed:
+        end_time = time.time()
+        simulation_time = end_time - start_time
