@@ -32,6 +32,9 @@ class Robot:
     def set_q(self, q):
         self.data.qpos[:len(q)] = q.copy()
 
+    def set_qacc(self, q):
+        self.data.qacc[:len(q)] = q.copy()
+
     def get_q(self):
         return self.data.qpos[:self.ndof].copy()
 
