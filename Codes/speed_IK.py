@@ -1,4 +1,5 @@
 # Testing of inverse_kinematics_adjusted() function for holding the box up position using 'q_arms_up' as a q_ref for the solver
+#Using the speed_animate() function in Simulation.py to animate the movement using the generated velocity profiles from velocity_profile() in Simulation.py
 import mujoco
 import mujoco.viewer as viewer
 import numpy as np
