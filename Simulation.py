@@ -118,7 +118,6 @@ class SoloSim:
           print({self.v.user_scn.geoms[id]})
         self.v.sync()
 
-# inverse kinematics function calling the inverse_kinematics function from solo.py and 
   def inverse_kinematics_adjusted(self, x_des, q_ref=None, q = None):
     """
     Inverse kinematics function calling the inverse_kinematics function from solo.py for a desired position of an end-effector
