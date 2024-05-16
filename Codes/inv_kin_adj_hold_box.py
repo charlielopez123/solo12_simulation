@@ -13,9 +13,12 @@ sim = SoloSim(q_init = q_init)
 
 sim.all_the_points()
 
+x_des = sim.x_des(target = key_points["arms_up_halfway"])
+q = sim.inverse_kinematics_adjusted(x_des, q_ref = robot_poses["q_arms_up_halfway"])
+sim.animate(q)
 
 x_des = sim.x_des(target = key_points["arms_up"])
-q = sim.inverse_kinematics_adjusted(x_des, q_ref = q_ref)
+q = sim.inverse_kinematics_adjusted(x_des, q_ref = robot_poses["q_arms_up_halfway"])
 sim.animate(q)
 
 x_des = sim.x_des(target = key_points["via_point1_get2box"])
