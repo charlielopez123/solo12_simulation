@@ -29,7 +29,7 @@ class Robot:
         self.q_home = np.zeros(self.ndof) # home position of the robot
         self.eps = 1e-6 # tolerance for the constraints of the inverse kinematics
 
-        self.FR_name = 'FR_FOOT' # name of the end-effector
+        self.FL_name = 'FL_FOOT' # name of the end-effector
         
     def set_q(self, q, ctrl = True):
         if not ctrl:
@@ -55,7 +55,7 @@ class Robot:
         else:
             data = self.data
         if EE_name is None:
-            EE_name = self.FR_name
+            EE_name = self.FL_name
         
         body = data.body(EE_name)
         x = body.xpos.copy() # position of the EE (3D vector)
@@ -75,7 +75,7 @@ class Robot:
         jac_rot = np.empty((3, self.model.nv), dtype=data.qpos.dtype)
 
         if EE_name is None:
-            EE_name = self.FR_name
+            EE_name = self.FL_name
         body = data.body(EE_name)
         mujoco.mj_jacBody(self.model, data, jac_pos, jac_rot, body.id)
         
@@ -84,7 +84,7 @@ class Robot:
     
     def inverse_kinematics(self, x_des, q_ref=None, EE_name= None, noise = np.random.normal(size=12)*0.1):
         if EE_name is None:
-            EE_name = self.FR_name
+            EE_name = self.FL_name
 
         if q_ref is None: # set joint reference position
             q_ref = self.q_home

@@ -204,11 +204,14 @@ class SoloSim:
     # Reshape to (10, 10, 10, 3)
     q_range_mesh = q_range_mesh.T # (10, 10, 10, 3)
 
+    index = EEs.index(EE_name) # Which index of EE is it ?
     x_FL = np.zeros((res, res, res, 3))
+    q = self.robot.get_q()
     for i in range(res):
         for j in range(res):
             for k in range(res):
-                x_FL[i, j, k] = self.robot.fk_pose(q = q_range_mesh[i, j, k], EE_name = EE_name)
+                q[index*3:(index + 1)*3] = q_range_mesh[i, j, k] # replace mesh in corresponding in joints
+                x_FL[i, j, k] = self.robot.fk_pose(q = q, EE_name = EE_name)
                 self.visualize_point(x_FL[i, j, k], rgba=rgba)
 
   def velocity_profile(self, num_time_steps, full_duration, current, desired):

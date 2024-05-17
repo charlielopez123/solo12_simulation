@@ -1,5 +1,8 @@
 import numpy as np
 
+#List of the different EEs in order
+EEs = ['FL_FOOT', 'FR_FOOT', 'HL_FOOT', 'HR_FOOT']
+
 # Corresponding joints for each End-Effector
 EE_joints = {'FL_FOOT': [0,1,2], 'FR_FOOT': [3,4,5], 'HL_FOOT': [6,7,8], 'HR_FOOT': [9,10,11]}
 
