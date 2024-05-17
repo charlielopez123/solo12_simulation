@@ -17,8 +17,8 @@ robot_poses = {
     #Initial rest pose
     "q_init": np.array([0, np.pi/2,  np.pi, 
                         0, np.pi/2,  np.pi,
-                        0, -np.pi/2,  np.pi,
-                        0, -np.pi/2,  np.pi]),
+                        0, 3*np.pi/2,  np.pi,
+                        0, 3*np.pi/2,  np.pi]),
 
     "q_arms_up_halfway": np.array([ 5.95874546e-06,  2.11708770e+00,  2.04899798e+00,
                                 -5.95798805e-06, 2.11708771e+00,  2.04899797e+00,

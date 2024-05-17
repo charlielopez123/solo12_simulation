@@ -17,4 +17,3 @@ sim.all_the_points()
 for mvmt in key_movements:
     points = key_movements[mvmt]
     sim.TOPPRA_speed_animate(points, timed = True)
-

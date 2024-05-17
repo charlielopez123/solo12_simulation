@@ -19,8 +19,10 @@ class Robot:
             self.set_q(q_init)
 
         self.nu = self.model.nu
-        self.qmin = np.pi * np.array([-2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2,])#np.pi * np.ones(self.ndof) #self.model.actuator_ctrlrange[:,0]
-        self.qmax =  np.pi * np.array([2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2]) #np.pi * np.ones(self.ndof)  #self.model.actuator_ctrlrange[:,1] # np.pi * np.array([0, 1, 1, 0, 1, -1, 0, -1, -1, 0, -1, -1,])
+        #self.qmin = 0.75 *np.pi * np.array([-2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2,])#np.pi * np.ones(self.ndof) #self.model.actuator_ctrlrange[:,0]
+        #self.qmax =  0.75 *np.pi * np.array([2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2]) #np.pi * np.ones(self.ndof)  #self.model.actuator_ctrlrange[:,1] # np.pi * np.array([0, 1, 1, 0, 1, -1, 0, -1, -1, 0, -1, -1,])
+        self.qmin= -0.1 + np.array([np.deg2rad(-75), 0, -np.pi, np.deg2rad(-255), 0, -np.pi, np.deg2rad(-75), 0, -np.pi, np.deg2rad(-255), 0, -np.pi])
+        self.qmax = 0.1  + np.array([np.deg2rad(255),  2*np.pi,  np.pi, np.deg2rad(75),  2*np.pi,  np.pi, np.deg2rad(255), 2*np.pi, np.pi, np.deg2rad(75), 2*np.pi, np.pi])
 
 
         self.bounds = Bounds(self.qmin, self.qmax)
@@ -29,14 +31,14 @@ class Robot:
 
         self.FR_name = 'FR_FOOT' # name of the end-effector
         
-    def set_q(self, q):
-        self.data.qpos[:len(q)] = q.copy()
-
-    def set_qacc(self, q):
-        self.data.qacc[:len(q)] = q.copy()
+    def set_q(self, q, ctrl = True):
+        if not ctrl:
+            self.data.qpos[7:-7] = q.copy()
+        else:
+            self.data.ctrl = q.copy()
 
     def get_q(self):
-        return self.data.qpos[:self.ndof].copy()
+        return self.data.qpos[7:-7].copy()
 
     def forward(self):
         mujoco.mj_forward(self.model, self.data)
@@ -87,7 +89,10 @@ class Robot:
 
         if q_ref is None: # set joint reference position
             q_ref = self.q_home
-        
+
+        q_ref += 2*np.pi * (q_ref < self.qmin)
+        q_ref -= 2*np.pi * (q_ref > self.qmax)
+
         def fun_and_grad(q): #  cost function and gradient
             c = 0.5 * np.sum((q-q_ref)**2)
             dc = q-q_ref
