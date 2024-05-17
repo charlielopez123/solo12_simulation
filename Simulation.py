@@ -52,7 +52,7 @@ class SoloSim:
       if timed:
         start_time = time.time()
       for t in np.arange(0, t_max, dt):
-        self.robot.set_q(t / t_max * (q_2 - q_1) + q_1)
+        self.robot.set_q(t / t_max * (q_2 - q_1) + q_1, ctrl=False)
         #self.robot.step()
         self.robot.forward()
         if self.v is not None:

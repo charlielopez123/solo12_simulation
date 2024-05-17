@@ -16,7 +16,7 @@ class Robot:
         self.data = mujoco.MjData(self.model)
 
         if q_init is not None:
-            self.set_q(q_init)
+            self.set_q(q_init, ctrl=False)
 
         self.nu = self.model.nu
         #self.qmin = 0.75 *np.pi * np.array([-2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2,])#np.pi * np.ones(self.ndof) #self.model.actuator_ctrlrange[:,0]
@@ -49,7 +49,7 @@ class Robot:
     def fk_pose(self, q=None, EE_name=None):
         if q is not None:
             data_copy = copy.copy(self.data)
-            data_copy.qpos[:len(q)] = q
+            data_copy.qpos[7:-7] = q
             mujoco.mj_fwdPosition(self.model, data_copy)
             data = data_copy
         else:
@@ -60,13 +60,12 @@ class Robot:
         body = data.body(EE_name)
         x = body.xpos.copy() # position of the EE (3D vector)
         R = np.reshape(body.xmat.copy(), (3,3)) # rotation matrix of the EE (3x3 matrix)
-
         return x
     
     def fk_jac(self, q=None, EE_name=None):
         if q is not None: 
             data_copy = copy.copy(self.data)
-            data_copy.qpos[:len(q)] = q
+            data_copy.qpos[7:-7] = q
             # self.data.qpos[:7] = q[:7]
             mujoco.mj_fwdPosition(self.model, data_copy)
             data = data_copy
@@ -80,7 +79,7 @@ class Robot:
         body = data.body(EE_name)
         mujoco.mj_jacBody(self.model, data, jac_pos, jac_rot, body.id)
         
-        jac = np.concatenate((jac_pos[:, :len(q)], jac_rot[:, :len(q)]), axis=0)
+        jac = np.concatenate((jac_pos[:, 6:-6], jac_rot[:, 6:-6]), axis=0)
         return jac
     
     def inverse_kinematics(self, x_des, q_ref=None, EE_name= None, noise = np.random.normal(size=12)*0.1):
@@ -90,7 +89,7 @@ class Robot:
         if q_ref is None: # set joint reference position
             q_ref = self.q_home
 
-        q_ref += 2*np.pi * (q_ref < self.qmin)
+        q_ref += 2*np.pi * (q_ref < self.qmin) #readjust the configurations to be within the bounds 
         q_ref -= 2*np.pi * (q_ref > self.qmax)
 
         def fun_and_grad(q): #  cost function and gradient
