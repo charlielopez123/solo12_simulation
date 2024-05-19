@@ -74,8 +74,8 @@ key_points = {
                         'q_ref': robot_poses["q_arms_up_halfway"]
                 },
 
-    "arms_up": {'pos': {"left": [0.1946    , 0.14795   , 0.35299013],
-                        "right": [ 0.1946    , -0.14795   ,  0.35299013]}, 
+    "arms_up": {'pos': {"left": [0.1946    , 0.14795   , 0.34],
+                        "right": [ 0.1946    , -0.14795   ,  0.34]}, 
                         'rgba': [0.5, 0.2, 0.3, 0.5],
                         'q_ref': robot_poses["q_arms_up_halfway"]
                 },
@@ -93,8 +93,8 @@ key_points = {
                         'q_ref': q_ref
     },
 
-    "box_high": {'pos': {"left": [0.45, 0.1, 0.15],
-                "right": [ 0.45, -0.1,  0.15]},
+    "box_high": {'pos': {"left": [0.45, 0.105, 0.15],
+                "right": [ 0.45, -0.105,  0.15]},
                 'rgba': [0, 1, 0, 0.5],
                 'q_ref': q_ref
     },
