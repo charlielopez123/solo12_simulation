@@ -310,7 +310,7 @@ class SoloSim:
         simulation_time = end_time - start_time
         print(f"Simulation time: {simulation_time:.2f} seconds")
 
-  def TOPPRA(self, N_samples, points, ):
+  def TOPPRA(self, points):
     """
     Defines the x_des dictionary to define all the desired positions of the front EEs whilst keeping the Hind legs put
 
@@ -324,6 +324,7 @@ class SoloSim:
 
     dof = 12
     way_pts = []
+    N_samples = len(points)
     ss = np.linspace(0, 1, N_samples)
     vlims = np.ones(dof)*4 #Velocity constraints defined to be 4 rad/s
     alims = np.ones(dof)*5 #Acceleration constraints defined to be 5 rad/s^2
@@ -366,7 +367,7 @@ class SoloSim:
       """
 
       N_samples = len(points)
-      duration, optimal_path = self.TOPPRA(N_samples, points)
+      duration, optimal_path = self.TOPPRA(points)
       num_time_steps = len(optimal_path)
 
       q = self.robot.get_q()
