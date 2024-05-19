@@ -39,6 +39,9 @@ class SoloSim:
     #Mujoco time step when using mj_step()
     self.dt_control = self.model.opt.timestep
 
+    #If in a context of a manipulation task, skip the IK computation of the hind legs
+    self.manipulation_task = True
+
   def animate(self, q_2, q_1 = None, t_max = 2, dt = 0.01, timed=False):
       """
       Animates a transition between two robot joint configurations.
@@ -145,11 +148,18 @@ class SoloSim:
 
     noise = self.build_noise()
 
-    for EE in EE_joints:
-      q_ik, success = self.robot.inverse_kinematics(x_des[EE], q_ref = q_ref, EE_name = EE, noise = noise)
-      print(f"for {EE}: {success}")
-      for i in EE_joints[EE]: # change the relevant joints of the EE
-        q[i] = q_ik[i]
+    if self.manipulation_task == True:
+      for EE in ['FL_FOOT', 'FR_FOOT']:
+        q_ik, success = self.robot.inverse_kinematics(x_des[EE], q_ref = q_ref, EE_name = EE, noise = noise)
+        print(f"for {EE}: {success}")
+        for i in EE_joints[EE]: # change the relevant joints of the EE
+          q[i] = q_ik[i]
+    else:
+      for EE in EE_joints:
+        q_ik, success = self.robot.inverse_kinematics(x_des[EE], q_ref = q_ref, EE_name = EE, noise = noise)
+        print(f"for {EE}: {success}")
+        for i in EE_joints[EE]: # change the relevant joints of the EE
+          q[i] = q_ik[i]
 
     return q
 
@@ -379,7 +389,7 @@ class SoloSim:
         q = optimal_path[i]
         self.robot.set_q(q, ctrl)
         if ctrl:
-          for _ in range(4):
+          for _ in range(2): # When sending a position control command, give time for it to actually reach the command
             self.robot.step()
         else:
           self.robot.forward()
@@ -393,6 +403,7 @@ class SoloSim:
         print(f'time for given momvement: {simulation_time}')
 
   def simulate(self, steps=500):# 1000 steps => 4.3 - 5 seconds
+    # Simulate the environment for a little
     for _ in range(steps):
         self.robot.step()
         self.v.sync()
