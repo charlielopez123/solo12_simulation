@@ -358,7 +358,7 @@ class SoloSim:
 
     return jnt_traj.duration, qs_sample
 
-  def TOPPRA_speed_animate(self, points, timed=False):
+  def TOPPRA_speed_animate(self, points, timed=False, ctrl = True):
       """
       Animates a transition between two robot joint configurations with a velocity profile.
 
@@ -377,8 +377,12 @@ class SoloSim:
 
       for i in range(num_time_steps):
         q = optimal_path[i]
-        self.robot.set_q(q, ctrl=False)
-        self.robot.forward()
+        self.robot.set_q(q, ctrl)
+        if ctrl:
+          for _ in range(4):
+            self.robot.step()
+        else:
+          self.robot.forward()
         if self.v is not None:
           self.v.sync()
 
@@ -387,4 +391,9 @@ class SoloSim:
         simulation_time = end_time - start_time
         print(f'optimal duration of movement: {duration}')
         print(f'time for given momvement: {simulation_time}')
+
+  def simulate(self, steps=500):# 1000 steps => 4.3 - 5 seconds
+    for _ in range(steps):
+        self.robot.step()
+        self.v.sync()
 
