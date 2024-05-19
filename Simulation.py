@@ -36,6 +36,9 @@ class SoloSim:
     if launch_viewer:
       self.v = viewer.launch_passive(self.robot.model, self.robot.data)
 
+    #Mujoco time step when using mj_step()
+    self.dt_control = self.model.opt.timestep
+
   def animate(self, q_2, q_1 = None, t_max = 2, dt = 0.01, timed=False):
       """
       Animates a transition between two robot joint configurations.
@@ -307,7 +310,7 @@ class SoloSim:
         simulation_time = end_time - start_time
         print(f"Simulation time: {simulation_time:.2f} seconds")
 
-  def TOPPRA(self, N_samples, points):
+  def TOPPRA(self, N_samples, points, ):
     """
     Defines the x_des dictionary to define all the desired positions of the front EEs whilst keeping the Hind legs put
 
@@ -345,13 +348,14 @@ class SoloSim:
     ################################################################################
     # The output trajectory is an instance of
     # :class:`toppra.interpolator.AbstractGeometricPath`.
-    ts_sample = np.linspace(0, jnt_traj.duration, 100)
+    # ts_sample = np.linspace(0, jnt_traj.duration, 100)
+    ts_sample = np.arange(0, jnt_traj.duration, self.dt_control)
     qs_sample = jnt_traj(ts_sample) # ("Position (rad)")
-    qds_sample = jnt_traj(ts_sample, 1) #("Velocity (rad/s)")
-    qdds_sample = jnt_traj(ts_sample, 2) #("Acceleration (rad/s2)")
+    #qds_sample = jnt_traj(ts_sample, 1) #("Velocity (rad/s)")
+    #qdds_sample = jnt_traj(ts_sample, 2) #("Acceleration (rad/s2)")
     ################################################################################
 
-    return jnt_traj.duration, qds_sample
+    return jnt_traj.duration, qs_sample
 
   def TOPPRA_speed_animate(self, points, timed=False):
       """
@@ -362,21 +366,24 @@ class SoloSim:
       """
 
       N_samples = len(points)
-      num_time_steps = 100
-      t_max, optimal_velocities = self.TOPPRA(N_samples, points)
-      dt = t_max/num_time_steps
+      duration, optimal_path = self.TOPPRA(N_samples, points)
+      num_time_steps = len(optimal_path)
 
-      q_1 = self.robot.get_q()
+      q = self.robot.get_q()
 
       if timed:
         start_time = time.time()
 
-      q = q_1
       for i in range(num_time_steps):
-        velocities = optimal_velocities[i]
-        q += velocities*dt
-        self.animate(q_2=q, t_max = dt, dt = dt/2) #animate till the next time step with a resolution of two
+        q = optimal_path[i]
+        self.robot.set_q(q, ctrl=False)
+        self.robot.forward()
+        if self.v is not None:
+          self.v.sync()
 
       if timed:
         end_time = time.time()
         simulation_time = end_time - start_time
+        print(f'optimal duration of movement: {duration}')
+        print(f'time for given momvement: {simulation_time}')
+
