@@ -6,3 +6,6 @@ data_plots.npy
 plot_data_plots.py
 get_data_plots.py
 get_commands.py
+commands.npy
+commands.json
+commands_json_doc.txt
