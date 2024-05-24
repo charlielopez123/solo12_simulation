@@ -169,10 +169,10 @@ key_movements = {
     key_points["box_on_back"]
     ],
 
-    "back2init": [
-    key_points["box_on_back"],
-    key_points['back2init_viapoint_1'],
-    key_points["initial_pos"]
-    ],
+    # "back2init": [
+    # key_points["box_on_back"],
+    # key_points['back2init_viapoint_1'],
+    # key_points["initial_pos"]
+    # ],
 
 }
