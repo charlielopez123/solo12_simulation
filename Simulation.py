@@ -43,8 +43,11 @@ class SoloSim:
     self.manipulation_task = True
 
     #Define the velocity limits (rad/s) and acceleration limits
-    self.vlim = 4
+    self.vlim = 2
     self.alim = 5
+
+    #Define the control rate with the time step
+    self.dt = 0.001
 
   def animate(self, q_2, q_1 = None, t_max = 2, dt = 0.01, timed=False):
       """
@@ -365,7 +368,7 @@ class SoloSim:
     # The output trajectory is an instance of
     # :class:`toppra.interpolator.AbstractGeometricPath`.
     # ts_sample = np.linspace(0, jnt_traj.duration, 100)
-    ts_sample = np.arange(0, jnt_traj.duration, self.dt_control)
+    ts_sample = np.arange(0, jnt_traj.duration, self.dt)
     qs_sample = jnt_traj(ts_sample) # ("Position (rad)")
     qds_sample = jnt_traj(ts_sample, 1) #("Velocity (rad/s)")
     qdds_sample = jnt_traj(ts_sample, 2) #("Acceleration (rad/s2)")
@@ -391,6 +394,7 @@ class SoloSim:
 
       N_samples = len(points)
       duration, optimal_path, optimal_vel, optimal_acc = self.TOPPRA(points)
+      print(f'duration of the movement: {duration}')
       num_time_steps = len(optimal_path)
 
       pos_TOPPRA.append(optimal_path)
