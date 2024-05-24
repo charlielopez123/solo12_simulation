@@ -391,7 +391,7 @@ class SoloSim:
         q = optimal_path[i]
         self.robot.set_q(q, ctrl)
         if ctrl:
-          for _ in range(3): # When sending a position control command, give time for it to actually reach the command
+          for _ in range(1): # When sending a position control command, give time for it to actually reach the command
             self.robot.step()
         else:
           self.robot.forward()
