@@ -58,7 +58,8 @@ robot_poses = {
                                 0.        , -1.57079633,  3.14159265,
                                 0.        ,-1.57079633,  3.14159265])
 }
-grab_box_width = 0.1053 # y position of where the EEs grab on the box
+
+grab_box_width = 0.1055 # y position of where the EEs grab on the box
 
 key_points = {
 
@@ -130,7 +131,14 @@ key_points = {
                 "right": [0, -grab_box_width,  0.033 + 0.15]},
                 'rgba': [0, 0, 1, 0.5],
                 'q_ref': robot_poses["q_box_on_back"]
-                }
+                },
+
+#Go back init position
+    'back2init_viapoint_1':{'pos':{"left": [0.1946/2, grab_box_width+0.05, 0.033 + 0.15/2 + 0.05],
+                "right": [0.1946/2, -(grab_box_width+0.05),  0.033 + 0.15/2 + 0.05]},
+                'rgba': [0, 0, 1, 0.5],
+                'q_ref': robot_poses["q_box_on_back"]
+                },
 }
 
 key_movements = {
@@ -159,6 +167,12 @@ key_movements = {
     key_points["box_up"],
     key_points['box_on_back_halfway'],
     key_points["box_on_back"]
+    ],
+
+    "back2init": [
+    key_points["box_on_back"],
+    key_points['back2init_viapoint_1'],
+    key_points["initial_pos"]
     ],
 
 }
