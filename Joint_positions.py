@@ -134,8 +134,8 @@ key_points = {
                 },
 
 #Go back init position
-    'back2init_viapoint_1':{'pos':{"left": [0.1946/2, grab_box_width+0.05, 0.033 + 0.15/2 + 0.05],
-                "right": [0.1946/2, -(grab_box_width+0.05),  0.033 + 0.15/2 + 0.05]},
+    'back2init_viapoint_1':{'pos':{"left": [0.1946*3/5, grab_box_width+0.03, 0.033 + 0.15/2 + 0.03],
+                "right": [0.1946*3/5, -(grab_box_width+0.03),  0.033 + 0.15/2 + 0.03]},
                 'rgba': [0, 0, 1, 0.5],
                 'q_ref': robot_poses["q_box_on_back"]
                 },
