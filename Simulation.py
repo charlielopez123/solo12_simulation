@@ -374,6 +374,8 @@ class SoloSim:
 
       Args:
         points: array of the different via_points for the given movement
+        timed: Boolean whether to time the movement aniamtion using time.time()
+        ctrl: Boolean to choose whether to simulate the physics or not (using step() or forward())
       """
 
       N_samples = len(points)
