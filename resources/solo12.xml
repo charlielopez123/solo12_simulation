@@ -10,7 +10,7 @@
     </default>
     <default class="affine">
       <!-- TODO: Tweak these -->
-      <position kp="15" ctrlrange="-100 100" forcerange="-10 10"/>
+      <position kp="10" ctrlrange="-100 100" forcerange="-10 10"/>
     </default>
     <joint type="hinge" damping="1" frictionloss="0.1"/>
   </default>
