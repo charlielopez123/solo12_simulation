@@ -2,5 +2,6 @@ __pycache__/
 scipy_optimize/
 TOPPRA/
 Old_Codes/
-data_plots.npy/
-plot_data_plots.py/
+data_plots.npy
+plot_data_plots.py
+get_data_plots.py
