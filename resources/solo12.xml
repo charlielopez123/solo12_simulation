@@ -10,7 +10,7 @@
     </default>
     <default class="affine">
       <!-- TODO: Tweak these -->
-      <position kp="15" ctrlrange="-100 100" forcerange="-10 10"/>
+      <position kp="10" ctrlrange="-100 100" forcerange="-10 10"/>
     </default>
     <joint type="hinge" damping="1" frictionloss="0.1"/>
   </default>
@@ -49,7 +49,8 @@
 
             <!-- Front left foot pose -->
             <body name="FL_FOOT" pos="0 0.009 -0.16">
-              <inertial pos="0 0 0" mass="0" diaginertia="0 0 0"/>
+              <inertial pos="0 0.05 0.05" mass="0" diaginertia="0 0 0"/>
+              <geom type="sphere" size="0.01" friction="1.0 1.0 0.1"/>
             </body>
           </body>
         </body>
@@ -78,6 +79,7 @@
             <!-- Front right foot pose -->
             <body name="FR_FOOT" pos="0 -0.009 -0.16">
               <inertial pos="0 0 0" mass="0" diaginertia="0 0 0"/>
+              <geom type="sphere" size="0.01" friction="1.0 1.0 0.1"/>
             </body>
           </body>
         </body>

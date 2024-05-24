@@ -42,6 +42,13 @@ class SoloSim:
     #If in a context of a manipulation task, skip the IK computation of the hind legs
     self.manipulation_task = True
 
+    #Define the velocity limits (rad/s) and acceleration limits
+    self.vlim = 2
+    self.alim = 5
+
+    #Define the control rate with the time step
+    self.dt = 0.001
+
   def animate(self, q_2, q_1 = None, t_max = 2, dt = 0.01, timed=False):
       """
       Animates a transition between two robot joint configurations.
@@ -336,10 +343,11 @@ class SoloSim:
     way_pts = []
     N_samples = len(points)
     ss = np.linspace(0, 1, N_samples)
-    vlims = np.ones(dof)*4 #Velocity constraints defined to be 4 rad/s
-    alims = np.ones(dof)*5 #Acceleration constraints defined to be 5 rad/s^2
+    vlims = np.ones(dof)*self.vlim #Velocity constraints defined to be 4 rad/s
+    alims = np.ones(dof)*self.alim #Acceleration constraints defined to be 5 rad/s^2
 
-    for i in range(N_samples):
+    way_pts.append(self.robot.get_q().tolist()) #Skip the IK computation of the starting as it is just the actual current position
+    for i in range(1, N_samples):
       x_des = self.x_des(target = points[i])
       q = self.inverse_kinematics_adjusted(x_des, q_ref = points[i]['q_ref']) # Use the appropriate q_ref for the IK computation
       way_pts.append(q.tolist())
@@ -360,26 +368,40 @@ class SoloSim:
     # The output trajectory is an instance of
     # :class:`toppra.interpolator.AbstractGeometricPath`.
     # ts_sample = np.linspace(0, jnt_traj.duration, 100)
-    ts_sample = np.arange(0, jnt_traj.duration, self.dt_control)
+    ts_sample = np.arange(0, jnt_traj.duration, self.dt)
     qs_sample = jnt_traj(ts_sample) # ("Position (rad)")
-    #qds_sample = jnt_traj(ts_sample, 1) #("Velocity (rad/s)")
-    #qdds_sample = jnt_traj(ts_sample, 2) #("Acceleration (rad/s2)")
+    qds_sample = jnt_traj(ts_sample, 1) #("Velocity (rad/s)")
+    qdds_sample = jnt_traj(ts_sample, 2) #("Acceleration (rad/s2)")
     ################################################################################
 
-    return jnt_traj.duration, qs_sample
+    return jnt_traj.duration, qs_sample, qds_sample, qdds_sample
 
-  def TOPPRA_speed_animate(self, points, timed=False, ctrl = True):
+  def TOPPRA_speed_animate(self, points, timed=False, ctrl = True, plot = False):
       """
       Animates a transition between two robot joint configurations with a velocity profile.
 
       Args:
         points: array of the different via_points for the given movement
+        timed: Boolean whether to time the movement animation using time.time()
+        ctrl: Boolean to choose whether to simulate the physics or not (using step() or forward())
+        plot: Boolean to gte the trajectories of the position, velocities and accelerations of the joints to later plot
       """
 
+      pos_sim = [] #initialize empty array to fill with q_joints at different time_steps using get_q()
+      pos_TOPPRA = []
+      vel = []
+      acc = []
+
       N_samples = len(points)
-      duration, optimal_path = self.TOPPRA(points)
+      duration, optimal_path, optimal_vel, optimal_acc = self.TOPPRA(points)
+      print(f'duration of the movement: {duration}')
       num_time_steps = len(optimal_path)
 
+      pos_TOPPRA.append(optimal_path)
+      vel.append(optimal_vel)
+      acc.append(optimal_acc)
+
+      
       q = self.robot.get_q()
 
       if timed:
@@ -389,18 +411,24 @@ class SoloSim:
         q = optimal_path[i]
         self.robot.set_q(q, ctrl)
         if ctrl:
-          for _ in range(3): # When sending a position control command, give time for it to actually reach the command
+          for _ in range(1): # When sending a position control command, give time for it to actually reach the command
             self.robot.step()
         else:
           self.robot.forward()
         if self.v is not None:
           self.v.sync()
+        pos_sim.append(self.robot.get_q())
+
+
 
       if timed:
         end_time = time.time()
         simulation_time = end_time - start_time
         print(f'optimal duration of movement: {duration}')
-        print(f'time for given momvement: {simulation_time}')
+        print(f'time for given movement: {simulation_time}')
+
+      if plot:
+        return duration, np.array(pos_sim), np.squeeze(np.array(pos_TOPPRA)), np.squeeze(np.array(vel)), np.squeeze(np.array(acc))
 
   def simulate(self, steps=500):# 1000 steps => 4.3 - 5 seconds
     # Simulate the environment for a little
