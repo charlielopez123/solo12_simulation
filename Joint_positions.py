@@ -87,8 +87,8 @@ key_points = {
                                 'q_ref': q_ref
                 },
 
-    "via_point2_get2box":{'pos': {"left": [0.4, 0.11, 0.25],
-                        "right": [ 0.4, -0.11,  0.25]},
+    "via_point2_get2box":{'pos': {"left": [0.4, 0.13, 0.25], # [0.4, 0.05, 0.25]
+                        "right": [0.4, -0.13, 0.25]}, # [0.4, -0.05, 0.25]
                         'rgba': [1, 0, 0, 0.5],
                         'q_ref': q_ref
     },
