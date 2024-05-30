@@ -141,6 +141,86 @@ key_points = {
                 },
 }
 
+key_points_hind_legs = {
+
+#Lift arms up
+    "initial_pos": {'pos': {"left": [-0.1946    , 0.14795   , 0.03],
+                        "right": [ -0.1946    , -0.14795   ,  0.03]}, 
+                        'rgba': [0.5, 0.2, 0.3, 0.5],
+                        'q_ref': robot_poses["q_init"]
+                },
+    
+    "arms_up_halfway": {'pos': {"left": [-0.1946    , 0.14795   , 0.2],
+                        "right": [ -0.1946    , -0.14795   ,  0.2]}, 
+                        'rgba': [0.5, 0.2, 0.3, 0.5],
+                        'q_ref': robot_poses["q_arms_up_halfway"]
+                },
+
+    "arms_up": {'pos': {"left": [-0.1946    , 0.14795   , 0.34],
+                        "right": [ -0.1946    , -0.14795   ,  0.34]}, 
+                        'rgba': [0.5, 0.2, 0.3, 0.5],
+                        'q_ref': robot_poses["q_arms_up_halfway"]
+                },
+
+#Get to box contact points
+    "via_point1_get2box":{'pos': {"left": [-0.3, 0.13, 0.3],
+                                "right": [ -0.3, -0.13,  0.3]},
+                                'rgba': [1, 0, 0, 0.5],
+                                'q_ref': q_ref
+                },
+
+    "via_point2_get2box":{'pos': {"left": [-0.4, 0.13, 0.25], # [0.4, 0.05, 0.25] push box
+                        "right": [-0.4, -0.13, 0.25]}, # [0.4, -0.05, 0.25] push box
+                        'rgba': [1, 0, 0, 0.5],
+                        'q_ref': q_ref
+    },
+
+    "box_high": {'pos': {"left": [-0.45, grab_box_width, 0.15],
+                "right": [ -0.45, -0.107,  0.15]},
+                'rgba': [0, 1, 0, 0.5],
+                'q_ref': q_ref
+    },
+
+#Lift the box up
+    "via_point1_lift_box": {'pos': {"left": [-0.4, grab_box_width, 0.21],
+                        "right": [ -0.4, -grab_box_width,  0.21]},
+                        'rgba': [0, 1, 0, 0.5],
+                        'q_ref': q_ref
+    },
+
+    "via_point2_lift_box": {'pos': {"left": [-0.3, grab_box_width, 0.26],
+                        "right": [ -0.3, -grab_box_width,  0.26]},
+                        'rgba': [0, 1, 0, 0.5],
+                        'q_ref': q_ref
+    },
+
+    "box_up": {'pos': {"left": [-0.15, grab_box_width, 0.3],
+                "right": [-0.15, -grab_box_width,  0.3]},
+                'rgba': [0, 1, 0, 0.5],
+                'q_ref': q_ref
+                },
+
+#Bring box back down
+    "box_on_back_halfway":{'pos':{"left": [-0.05, grab_box_width, 0.033 + 0.25],
+                "right": [-0.05, -grab_box_width,  0.033 + 0.25]},
+                'rgba': [0, 0, 1, 0.5],
+                'q_ref': robot_poses["q_box_on_back"]
+                },
+
+    "box_on_back":{'pos':{"left": [-0, grab_box_width, 0.033 + 0.15],
+                "right": [-0, -grab_box_width,  0.033 + 0.15]},
+                'rgba': [0, 0, 1, 0.5],
+                'q_ref': robot_poses["q_box_on_back"]
+                },
+
+#Go back init position
+    'back2init_viapoint_1':{'pos':{"left": [-0.1946*3/5, grab_box_width+0.03, 0.033 + 0.15/2 + 0.03],
+                "right": [-0.1946*3/5, -(grab_box_width+0.03),  0.033 + 0.15/2 + 0.03]},
+                'rgba': [0, 0, 1, 0.5],
+                'q_ref': robot_poses["q_box_on_back"]
+                },
+}
+
 key_movements = {
 
     "lift_arms": [
