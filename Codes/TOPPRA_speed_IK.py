@@ -10,14 +10,22 @@ from Simulation import SoloSim
 from Joint_positions import *
 
 q_init = robot_poses["q_init"]
-sim = SoloSim(q_init = q_init, use_hind_legs=True)
+sim = SoloSim(q_init = q_init, use_hind_legs=False)
+sim.vlim = 3
+sim.alim = 5
 
-sim.all_the_points(key_points_hind_legs)
+sim.all_the_points()
 
 duration = 0
-for mvmt in key_movements_hind_legs:
-    points = key_movements_hind_legs[mvmt]
-    dur = sim.TOPPRA_speed_animate(points, ctrl = True, plot = True)
-    duration += dur[0]
+if not sim.use_hind_legs:
+    for mvmt in key_movements:
+        points = key_movements[mvmt]
+        dur = sim.TOPPRA_speed_animate(points, ctrl = True, plot = True)
+        duration += dur[0]
+else:
+    for mvmt in key_movements_hind_legs:
+        points = key_movements_hind_legs[mvmt]
+        dur = sim.TOPPRA_speed_animate(points, ctrl = True, plot = True)
+        duration += dur[0]
 
 print(duration)
