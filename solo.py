@@ -33,9 +33,9 @@ class Robot:
         
     def set_q(self, q, ctrl = True):
         if not ctrl:
-            self.data.qpos[7:-7] = q.copy()
+            self.data.qpos[7:-7] = q.copy() # self.data.qpos of shape (26,), first 7 positions (x, y, z, quaternion) for base link, 12 for joint positions considered hinges, then 7 last for box
         else:
-            self.data.ctrl = q.copy()
+            self.data.ctrl = q.copy() # self.data.ctrl of shape (12,) position control command for each joint
 
     def get_q(self):
         return self.data.qpos[7:-7].copy()
