@@ -11,10 +11,10 @@ from Joint_positions import *
 
 q_init = robot_poses["q_init"]
 sim = SoloSim(q_init = q_init, use_hind_legs=False)
-sim.vlim = 3
-sim.alim = 5
+sim.vlim = 10
+sim.alim = 15
 
-sim.all_the_points()
+#sim.all_the_points()
 
 duration = 0
 if not sim.use_hind_legs:
