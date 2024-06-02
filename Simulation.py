@@ -303,6 +303,7 @@ class SoloSim:
     for i in range(12):
         constraints.append({'type': 'eq', 'fun': list_of_constraints[i]})
 
+    #TODO add constraints of null velocity at beginning and end of the movement
     # Initial guess for velocities and duration
     initial_guess = np.zeros(12 * num_time_steps)  # Adjust based on your requirements
 
