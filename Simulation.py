@@ -251,7 +251,11 @@ class SoloSim:
     q_max = np.array([np.deg2rad(255),  np.pi,  np.pi, np.deg2rad(75),    np.pi,  np.pi, np.deg2rad(255), np.pi, np.pi, np.deg2rad(75), np.pi, np.pi])
 
     q_range = np.linspace(0, 2*np.pi, res) # (10, 3)
-    q_range_mesh = np.array(np.meshgrid(q_range, q_range, q_range)) # (3, 10, 10, 10)
+    q_range_0= np.linspace(q_min[0], q_max[0], res) # (10, 3)
+    q_range_1= np.linspace(q_min[1], q_max[1], res) # (10, 3)
+    q_range_2= np.linspace(q_min[2], q_max[2], res) # (10, 3)
+
+    q_range_mesh = np.array(np.meshgrid(q_range_0, q_range_1, q_range_2)) # (3, 10, 10, 10)
     # Reshape to (10, 10, 10, 3)
     q_range_mesh = q_range_mesh.T # (10, 10, 10, 3)
 
