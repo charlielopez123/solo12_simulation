@@ -110,7 +110,7 @@ robot_poses_hind_legs = {
                                 -0.32631274,-1.4666653,  -1.45947616])
 }
 
-grab_box_width = 0.1054 # y position of where the EEs grab onto the box
+grab_box_width = 0.05 # y position of where the EEs grab onto the box
 grab_box_height = 0.15 # z position of where the EES grab  onto the box
 
 key_points = {
@@ -215,33 +215,33 @@ key_points_hind_legs = {
                 },
 
 #Get to box contact points
-    "via_point1_get2box":{'pos': {"left": [-0.3, 0.13, 0.3],
-                                "right": [ -0.3, -0.13,  0.3]},
+    "via_point1_get2box":{'pos': {"left": [-0.3, grab_box_width+0.015, 0.3],
+                                "right": [ -0.3, -(grab_box_width+0.015),  0.3]},
                                 'rgba': [1, 0, 0, 0.5],
                                 'q_ref': q_ref_hind_legs
                 },
 
-    "via_point2_get2box":{'pos': {"left": [-0.4, 0.13, 0.25], # [0.4, 0.05, 0.25] push box
-                        "right": [-0.4, -0.13, 0.25]}, # [0.4, -0.05, 0.25] push box
+    "via_point2_get2box":{'pos': {"left": [-0.4, grab_box_width+0.015, grab_box_height+0.1], # [0.4, 0.05, 0.25] push box
+                        "right": [-0.4, -(grab_box_width+0.015), grab_box_height+0.1]}, # [0.4, -0.05, 0.25] push box
                         'rgba': [1, 0, 0, 0.5],
                         'q_ref': q_ref_hind_legs
     },
 
-    "box_high": {'pos': {"left": [-0.45, grab_box_width, 0.15],
-                "right": [ -0.45, -0.107,  0.15]},
+    "box_high": {'pos': {"left": [-0.45, grab_box_width, grab_box_height],
+                "right": [ -0.45, -grab_box_width,  grab_box_height]},
                 'rgba': [0, 1, 0, 0.5],
                 'q_ref': q_ref_hind_legs
     },
 
 #Lift the box up
-    "via_point1_lift_box": {'pos': {"left": [-0.4, grab_box_width, 0.21],
-                        "right": [ -0.4, -grab_box_width,  0.21]},
+    "via_point1_lift_box": {'pos': {"left": [-0.4, grab_box_width, grab_box_height+0.06],
+                        "right": [ -0.4, -grab_box_width,  grab_box_height+0.06]},
                         'rgba': [0, 1, 0, 0.5],
                         'q_ref': q_ref_hind_legs
     },
 
-    "via_point2_lift_box": {'pos': {"left": [-0.3, grab_box_width, 0.26],
-                        "right": [ -0.3, -grab_box_width,  0.26]},
+    "via_point2_lift_box": {'pos': {"left": [-0.3, grab_box_width, grab_box_height+0.11],
+                        "right": [ -0.3, -grab_box_width,  grab_box_height+0.11]},
                         'rgba': [0, 1, 0, 0.5],
                         'q_ref': q_ref_hind_legs
     },
