@@ -110,7 +110,7 @@ robot_poses_hind_legs = {
                                 -0.32631274,-1.4666653,  -1.45947616])
 }
 
-grab_box_width = 0.05 # y position of where the EEs grab onto the box
+grab_box_width = 0.1055 # y position of where the EEs grab onto the box
 grab_box_height = 0.15 # z position of where the EES grab  onto the box
 
 key_points = {
