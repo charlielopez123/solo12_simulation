@@ -38,7 +38,7 @@ class Robot:
             self.data.ctrl = q.copy() # self.data.ctrl of shape (12,) position control command for each joint
 
     def get_q(self):
-        return self.data.qpos[7:-7].copy()
+        return self.data.qpos[7:7+12].copy()
 
     def forward(self):
         mujoco.mj_forward(self.model, self.data)
@@ -49,7 +49,7 @@ class Robot:
     def fk_pose(self, q=None, EE_name=None):
         if q is not None:
             data_copy = copy.copy(self.data)
-            data_copy.qpos[7:-7] = q
+            data_copy.qpos[7:7+12] = q
             mujoco.mj_fwdPosition(self.model, data_copy)
             data = data_copy
         else:
@@ -65,7 +65,7 @@ class Robot:
     def fk_jac(self, q=None, EE_name=None):
         if q is not None: 
             data_copy = copy.copy(self.data)
-            data_copy.qpos[7:-7] = q
+            data_copy.qpos[7:7+12] = q
             # self.data.qpos[:7] = q[:7]
             mujoco.mj_fwdPosition(self.model, data_copy)
             data = data_copy
@@ -79,7 +79,7 @@ class Robot:
         body = data.body(EE_name)
         mujoco.mj_jacBody(self.model, data, jac_pos, jac_rot, body.id)
         
-        jac = np.concatenate((jac_pos[:, 6:-6], jac_rot[:, 6:-6]), axis=0)
+        jac = np.concatenate((jac_pos[:, 6:6+12], jac_rot[:, 6:6+12]), axis=0)
         return jac
     
     def inverse_kinematics(self, x_des, q_ref=None, EE_name= None, noise = np.random.normal(size=12)*0.1):
