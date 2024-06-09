@@ -1,5 +1,13 @@
-# Testing of inverse_kinematics_adjusted() function for holding the box up position using 'q_arms_up' as a q_ref for the solver
-#Using the TOPPRA_speed_animate() function in Simulation.py to animate the movement using the generated velocity profiles from TOPPRA() in Simulation.py
+"""
+This script simulates and visualizes the motion of a robot picking up a box, following a trajectory optimization policy.
+Using the TOPPRA_speed_animate() function in Simulation.py to animate the movement using the generated velocity profiles from TOPPRA() in Simulation.py
+
+Note: This script must be launched with an mjpython kernel to visualize the animation.
+
+Steps:
+1. Initialize the simulation with initial joint positions.
+2. Iterate through key movements to calculate optimal trajectories using the TOPP-RA algorithm.
+"""
 import mujoco
 import mujoco.viewer as viewer
 import numpy as np
@@ -16,9 +24,12 @@ sim = SoloSim(q_init = q_init, use_hind_legs=False, use_box=True)
 sim.vlim = 10 
 sim.alim = 15
 
+#Show all the points
 sim.all_the_points()
 
+#Initialize duration
 duration = 0
+# Iterate through key movements to calculate and animate optimal trajectories
 if not sim.use_hind_legs:
     for mvmt in key_movements:
         points = key_movements[mvmt]
