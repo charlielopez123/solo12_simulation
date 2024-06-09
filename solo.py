@@ -1,3 +1,34 @@
+"""
+This code was adapted from Julius Jankowski's original code.
+
+This script defines a class `Robot` for handling robotic manipulator operations, including forward and inverse kinematics, joint control, and optimization for inverse kinematics.
+
+The `Robot` class includes the following methods:
+
+1. __init__(self, model, q_init=None): Initializes the Robot object with a Mujoco model and optional initial joint positions.
+
+2. set_q(self, q, ctrl=True): Sets the joint positions or control commands.
+
+3. get_q(self): Returns the current joint positions.
+
+4. forward(self): Performs forward kinematics computation.
+
+5. step(self): Moves the simulation forward by one timestep.
+
+6. fk_pose(self, q=None, EE_name=None): Computes the forward kinematics pose of the end-effector.
+
+7. fk_jac(self, q=None, EE_name=None): Computes the forward kinematics Jacobian.
+
+8. inverse_kinematics(self, x_des, q_ref=None, EE_name=None, noise=np.random.normal(size=12)*0.1): Computes inverse kinematics to find joint positions for a desired end-effector pose.
+
+    - The cost function minimizes the squared difference between current and desired joint positions.
+    - Positional constraints ensure that the end-effector reaches the desired pose.
+    - The optimization is performed using the Sequential Least Squares Programming (SLSQP) method.
+    - The initial solution includes noise to avoid singularities.
+
+"""
+
+
 import mujoco
 import numpy as np
 from scipy.optimize import minimize, Bounds, NonlinearConstraint
@@ -18,8 +49,6 @@ class Robot:
             self.set_q(q_init, ctrl=False)
 
         self.nu = self.model.nu
-        #self.qmin = 0.75 *np.pi * np.array([-2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2,])#np.pi * np.ones(self.ndof) #self.model.actuator_ctrlrange[:,0]
-        #self.qmax =  0.75 *np.pi * np.array([2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2]) #np.pi * np.ones(self.ndof)  #self.model.actuator_ctrlrange[:,1] # np.pi * np.array([0, 1, 1, 0, 1, -1, 0, -1, -1, 0, -1, -1,])
         self.qmin= -0.1 + np.array([np.deg2rad(-75), 0, -np.pi, np.deg2rad(-255), 0, -np.pi, np.deg2rad(-75), 0, -np.pi, np.deg2rad(-255), 0, -np.pi])
         self.qmax = 0.1  + np.array([np.deg2rad(255),  2*np.pi,  np.pi, np.deg2rad(75),  2*np.pi,  np.pi, np.deg2rad(255), 2*np.pi, np.pi, np.deg2rad(75), 2*np.pi, np.pi])
 
