@@ -1,3 +1,20 @@
+"""
+This Python file defines key points, movements, and reference configurations for a robot performing tasks such as picking up a box.
+
+- EEs: List of end-effectors.
+- EE_joints: Corresponding joints for each end-effector.
+- name_joints: Names of all joints in the same order as Robot.data.qpos[:Robot.ndof].
+- q_ref: Main reference configuration used for inverse kinematics computations.
+- q_ref_hind_legs: Main reference configuration used for inverse kinematics computations if using hind legs.
+- robot_poses: Dictionary storing various named robot poses for the front legs.
+- robot_poses_hind_legs: Dictionary storing various named robot poses for the hind legs.
+- grab_box_width: Width of the box grabbed by the end-effectors. Must be coherent with the box size defined in 'scene.xml'
+- grab_box_height: Height at which the box is grabbed by the end-effectors. Must be coherent with the box size defined in 'scene.xml'
+- key_points: Dictionary storing key points for the front legs.
+- key_points_hind_legs: Dictionary storing key points for the hind legs.
+- key_movements: Dictionary storing key movements for the front legs.
+- key_movements_hind_legs: Dictionary storing key movements for the hind legs.
+"""
 import numpy as np
 
 #List of the different EEs in order
@@ -186,10 +203,16 @@ key_points = {
                 },
 
 #Go back init position
-    'back2init_viapoint_1':{'pos':{"left": [0.1946*3/5, grab_box_width+0.03, 0.033 + 0.15/2 + 0.03],
-                "right": [0.1946*3/5, -(grab_box_width+0.03),  0.033 + 0.15/2 + 0.03]},
-                'rgba': [0, 0, 1, 0.5],
-                'q_ref': robot_poses["q_box_on_back"]
+    'back2init_viapoint_1':{'pos':{"left": [0.1946*2/5, grab_box_width+0.04, 0.033 + 0.16 + 0.04],
+                "right": [0.1946*2/5, -(grab_box_width+0.04),  0.033 + 0.16 + 0.04]},
+                'rgba': [1, 0.65, 0, 0.5],
+                'q_ref': robot_poses["q_init"]
+                },
+
+    'back2init_viapoint_2':{'pos':{"left": [0.1946*4/5, grab_box_width+0.04, 0.033 + 0.12 + 0.02],
+                "right": [0.1946*4/5, -(grab_box_width+0.04),  0.033 + 0.12 + 0.02]},
+                'rgba': [1, 0.65, 0, 0.5],
+                'q_ref': robot_poses["q_init"]
                 },
 }
 
