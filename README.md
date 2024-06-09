@@ -21,3 +21,4 @@ This project aims to implement a robust and efficient trajectory planning and co
 - Simulation.py: defines the simulation environment used for this project, including setting up the MuJoCo physics simulator, configuring the SOLO12 quadruped robot, and implementing all the main functions necessary for trajectory planning, optimization, and control, such as the IK Solver, TOPPRA algorithm for velocity profile generation, and animation of the robot's movements.
 - solo.py: defines a class `Robot` for handling robotic manipulator operations, including forward and inverse kinematics, joint control, and optimization for inverse kinematics.
 - Joint_positions.py: defines key points, movements, and reference configurations for a robot performing tasks such as picking up a box.
+- master-board: Folder containing the python scripts to send commands to the solo12's master-board 
