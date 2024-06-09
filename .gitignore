@@ -13,3 +13,4 @@ commands_json_doc.txt
 Codes/hind_legs_testing.py
 Codes/inv_kin_adj.py
 resources/solo12_gen.xml
+generated_trajectory.py
