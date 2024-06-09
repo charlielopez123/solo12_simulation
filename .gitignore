@@ -6,10 +6,8 @@ MUJOCO_LOG.TXT
 data_plots.npy
 plot_data_plots.py
 get_data_plots.py
-get_commands.py
 commands.npy
 commands.json
-commands_json_doc.txt
 Codes/hind_legs_testing.py
 Codes/inv_kin_adj.py
 resources/solo12_gen.xml

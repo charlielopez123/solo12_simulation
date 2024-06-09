@@ -1,4 +1,4 @@
-#Visualization of the workspace
+#Visualization of the workspace using SoloSim.workspace()
 import mujoco
 import mujoco.viewer as viewer
 import numpy as np

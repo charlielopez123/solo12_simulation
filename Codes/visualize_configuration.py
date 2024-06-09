@@ -1,4 +1,4 @@
-#Visualize a certain configuration in 
+#Visualize a certain configuration in the Mujoco viewe
 import mujoco
 import mujoco.viewer as viewer
 import numpy as np
@@ -10,8 +10,6 @@ from Joint_positions import *
 
 q_init = robot_poses["q_init"]
 sim = SoloSim(q_init = q_init, use_hind_legs=False)
-
-#sim.all_the_points() # Visualize key points
 
 sleep(1)
 q = q_ref # Select a configuration from Joint_positions.py

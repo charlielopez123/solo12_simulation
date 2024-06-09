@@ -1,0 +1,15 @@
+The commands.json file contains position and velocity commands for the joint of the robot
+
+Order of the joints: ['FL_HAA', 'FL_HFE', 'FL_KFE', 'FR_HAA', 'FR_HFE', 'FR_KFE', 'HL_HAA', 'HL_HFE', 'HL_KFE', 'HR_HAA', 'HR_HFE', 'HR_KFE']
+
+Commands with a Velocity limit defined at: vlim = 0.5 rad/s
+Commands with a Acceleration limit defined at: alim = 3 rad/s^2
+Control rate: 1000 Hz
+dt: 0.001 s
+
+format:{
+        "time_stamps": Time samples for the commands, # shape(num_time_steps,)
+        "joint_positions": "Position commands for each joint, with each column representing a joint, # shape(num_time_steps, 12)
+        "joint_velocities": Velocity commands for each joint, with each column representing a joint, # shape(num_time_steps, 12)
+        "joint_accelerations": Acceleration commands for each joint, with each column representing a joint # shape(num_time_steps, 12)
+}
