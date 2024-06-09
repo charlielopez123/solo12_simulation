@@ -1,6 +1,5 @@
 import mujoco
 import numpy as np
-#import quaternion
 from scipy.optimize import minimize, Bounds, NonlinearConstraint
 import copy
 
