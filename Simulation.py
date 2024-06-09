@@ -22,7 +22,8 @@ class SoloSim:
             q_init=None,
             launch_viewer = True,
             manipulation_task = True,
-            use_hind_legs = False):
+            use_hind_legs = False,
+            use_box = False):
     """
     Initializes the simulation environment for the Solo robot.
 
@@ -31,14 +32,20 @@ class SoloSim:
         launch_viewer (bool, optional): Flag to launch the MuJoCo viewer. Defaults to True.
         manipulation_task (bool, optional): Flag to indicate if the simulation is for a manipulation task. If True, inverse kinematics for hind legs will be skipped. Defaults to True.
         use_hind_legs (bool, optional): Flag to indicate whether to use hind legs for manipulation tasks. Defaults to False.
+        use_box (bool, optional): Flag to indicate whether to add the box for manipulation tasks. Defaults to False.
     """
     # Load scene and model
-    self.model = mujoco.MjModel.from_xml_path('scene.xml')
+    if use_box:
+      self.model = mujoco.MjModel.from_xml_path('scene.xml')
+    else:
+      self.model = mujoco.MjModel.from_xml_path('scene_without_box.xml')
     self.robot = Robot(self.model, q_init)
 
     # Launch viewer
     if launch_viewer:
       self.v = viewer.launch_passive(self.robot.model, self.robot.data)
+    else: 
+      self.v = None
 
     #Mujoco time step when using mj_step()
     self.dt_control = self.model.opt.timestep
@@ -56,7 +63,7 @@ class SoloSim:
     #Define the control rate with the time step
     self.dt = 0.001
 
-  def animate(self, q_2, q_1 = None, t_max = 2, dt = 0.01, timed=False):
+  def animate(self, q_2, q_1 = None, t_max = 2, dt = 0.01, timed=False, ctrl = False):
       """
     Animates a transition between two robot joint configurations.
 
@@ -66,6 +73,7 @@ class SoloSim:
       t_max (float, optional): Maximum simulation time. Defaults to 2 seconds.
       dt (float, optional): Time step for simulation. Defaults to 0.01 seconds.
       timed (bool, optional): Flag to print the simulation time. Defaults to False.
+      ctrl (bool, optional): Whether to simulate the physics or not (using step() or forward()). Defaults to True.
     """
       if q_1 is None:
         q_1 = self.robot.get_q()
@@ -73,8 +81,10 @@ class SoloSim:
         start_time = time.time()
       for t in np.arange(0, t_max, dt):
         self.robot.set_q(t / t_max * (q_2 - q_1) + q_1, ctrl=False)
-        #self.robot.step()
-        self.robot.forward()
+        if ctrl is False:
+          self.robot.forward()
+        else:
+          self.robot.step()
         if self.v is not None:
           self.v.sync()
         sleep(dt)
@@ -121,7 +131,8 @@ class SoloSim:
 
       Args:
         key_pos: The position of the point to visualize.
-        id: Optional ID for the geometry (used for potential reuse).
+        rgba (optional): The color and transparency of the point. Defaults to [0.8, 0.3, 0.3, 0.5].
+        verbose (optional): If True, prints additional information. Defaults to False.
       """
       sphere_radius = 0.01
 
@@ -269,60 +280,105 @@ class SoloSim:
                 x_FL[i, j, k] = self.robot.fk_pose(q = q, EE_name = EE_name)
                 self.visualize_point(x_FL[i, j, k], rgba=rgba)
 
-  def velocity_profile(self, num_time_steps, full_duration, current, desired):
+  def velocity_profile(self, dt, full_duration, current, desired, plot = False, verbose = False):
     """
-    Deprecated, more optimal using TOPPRA
-    Generates an optimal velocity profile to minimize jerk for joint movements.
+        Deprecated, more optimal using TOPPRA
+        Generates an optimal velocity profile to minimize jerk for joint movements.
 
-    Args:
-      num_time_steps (int): Number of time steps for the velocity profile.
-      full_duration (float): Total duration of the movement.
-      current (array): Initial joint positions.
-      desired (array): Desired joint positions.
+        Args:
+          dt (float): Time step in seconds.
+          full_duration (float): Total duration of the movement.
+          current (array): Initial joint positions.
+          desired (array): Desired joint positions.
+          plot (bool, optional): If True, plots the joint positions, velocities, and accelerations over time. Defaults to False.
+          verbose (bool, optional): If True, prints additional information. Defaults to False.
 
-    Returns:
-      array: Time-discretized joint positions following the optimal velocity profile.
-    """
-    dt = full_duration/num_time_steps
+        Returns:
+          tuple: A tuple containing:
+            - array: Time-discretized joint positions following the optimal velocity profile.
+            - array: Time-discretized joint velocities following the optimal velocity profile.
+            - array: Time-discretized joint accelerations following the optimal velocity profile.
+        """
+    num_time_steps = int(full_duration/dt)
 
-    # Define your objective function to minimize jerk
+    # Define the objective function to minimize jerk
     def objective_function(vars):
-      smoothness_measure = 0
-      for i in range(12): #Get sum of jerk for each joint movement
-        velocities = vars[i * num_time_steps : (i+1) * num_time_steps]
-        jerk = np.diff(velocities, axis=0, prepend=0, append=0, n=2)
-        smoothness_measure += np.sum(np.abs(jerk))
-      return smoothness_measure
+        smoothness_measure = 0
+        for i in range(12):
+            # Extract the velocities for the i-th joint
+            velocities = vars[12 * num_time_steps + i * num_time_steps: 12 * num_time_steps + (i + 1) * num_time_steps]
+            accelerations = np.diff(velocities, prepend=0) / dt
+            jerk = np.diff(accelerations, prepend=0) / dt
+            smoothness_measure += np.sum(jerk**2)
+        return smoothness_measure
 
-    list_of_constraints = [] 
-    # define all 12 of position constraints function for each joint
-    for i in range(12):
-        def constraint(vars, i = i): #https://stackoverflow.com/questions/3431676/creating-functions-or-lambdas-in-a-loop-or-comprehension
-            velocities = vars[i * num_time_steps : (i+1) * num_time_steps]
-            return current[i] + np.sum(velocities * dt) - desired[i] # Ensure joint reaches target position
-        list_of_constraints.append(constraint)
-
-    # Set up the list of nonlinear inequality constraint dictionaries
+    # Define the constraints
     constraints = []
-    for i in range(12):
-        constraints.append({'type': 'eq', 'fun': list_of_constraints[i]})
 
-    #TODO add constraints of null velocity at beginning and end of the movement
-    # Initial guess for velocities and duration
-    initial_guess = np.zeros(12 * num_time_steps)  # Adjust based on your requirements
+    # Position constraints at start and end
+    for i in range(12):
+        # Start position constraint
+        def start_pos_constraint(vars, i=i):
+            return vars[i * num_time_steps] - current[i]
+        constraints.append({'type': 'eq', 'fun': start_pos_constraint})
+        
+        # End position constraint
+        def end_pos_constraint(vars, i=i):
+            return vars[i * num_time_steps + (num_time_steps - 1)] - desired[i]
+        constraints.append({'type': 'eq', 'fun': end_pos_constraint})
+
+    # Velocity constraints at start and end (assuming they should be zero)
+    for i in range(12):
+        # Start velocity constraint
+        def start_vel_constraint(vars, i=i):
+            return vars[12 * num_time_steps + i * num_time_steps]
+        constraints.append({'type': 'eq', 'fun': start_vel_constraint})
+        
+        # End velocity constraint
+        def end_vel_constraint(vars, i=i):
+            return vars[12 * num_time_steps + i * num_time_steps + (num_time_steps - 1)]
+        constraints.append({'type': 'eq', 'fun': end_vel_constraint})
+
+    # Positional evolution constraint (position at t+1 = position at t + velocity * dt)
+    for i in range(12):
+        for t in range(num_time_steps - 1):
+            def pos_evolution_constraint(vars, i=i, t=t):
+                return vars[i * num_time_steps + t + 1] - (vars[i * num_time_steps + t] + vars[12 * num_time_steps + i * num_time_steps + t] * dt)
+            constraints.append({'type': 'eq', 'fun': pos_evolution_constraint})
+
+    # Initial guess: interpolate positions, zero velocities
+    initial_positions = np.linspace(current, desired, num=num_time_steps).flatten()
+    initial_velocities = np.zeros(12 * num_time_steps)
+    initial_guess = np.concatenate([initial_positions, initial_velocities])
+
+    # Check the objective function value at the initial guess
+    print(f'Initial objective function value: {objective_function(initial_guess)}')
 
     # Run the optimization
     result = minimize(fun=objective_function, x0=initial_guess, method='SLSQP', constraints=constraints)
-    print(result)
 
-    # Extract the optimal velocities
-    optimal_velocities = []
-    for i in range(12):
-        optimal_velocities.append(result.x[i * num_time_steps : (i+1) * num_time_steps])
-        #print(f'optimal_velocities of {name_joints[i]}: {optimal_velocities[i]}')
-        print(f'{list_of_constraints[i](result.x)}')
+    pos = []
+    vel = []
+    acc = []
+    # Extract and print the optimal positions and velocities
+    if result.success:
+          for i in range(12):
+              optimal_positions = result.x[i * num_time_steps: (i + 1) * num_time_steps]
+              optimal_velocities = result.x[12 * num_time_steps + i * num_time_steps: 12 * num_time_steps + (i + 1) * num_time_steps]
+              optimal_accelerations = np.diff(optimal_velocities, prepend=0) / dt
+              if verbose:
+                print(f'Optimal positions of {name_joints[i]}: {optimal_positions}')
+                print(f'Optimal velocities of {name_joints[i]}: {optimal_velocities}')
+                print(f'Optimal accelerations of {name_joints[i]}: {optimal_accelerations}')
+              if plot:
+                pos.append(optimal_positions)
+                vel.append(optimal_velocities)
+                acc.append(optimal_accelerations)
+    else:
+        print("Optimization failed:", result.message)
 
-    return optimal_velocities
+    if plot:
+      return np.array(pos), np.array(vel), np.array(acc)
 
   def x_des(self, target):
     """
@@ -346,7 +402,7 @@ class SoloSim:
           'HR_FOOT': target['pos']["right"]} #keep current EE position for Hind Legs
     return x_des
 
-  def speed_animate(self, q_2, q_1 = None, t_max = 3, num_time_steps = 10, timed=False):
+  def speed_animate(self, q_2, q_1 = None, t_max = 3, dt = 0.01, timed=False):
       """
       Deprecated, more optimal to use TOPPRA trajectory profiles
       Animates a transition between two robot joint configurations with a velocity profile.
@@ -360,20 +416,21 @@ class SoloSim:
       """
 
 
-      dt = t_max/num_time_steps
+      num_time_steps = t_max/dt
+      print(type(num_time_steps))
 
       if q_1 is None:
         q_1 = self.robot.get_q()
 
-      optimal_velocities = self.velocity_profile(num_time_steps, t_max, q_1, q_2) # get optimal velocities for each joint
+      optimal_positions = self.velocity_profile(dt, t_max, q_1, q_2) # get optimal velocities for each joint
 
       if timed:
         start_time = time.time()
 
       q = q_1
       for i in range(num_time_steps):
-        velocities = [sub_array[i] for sub_array in optimal_velocities]
-        q += velocities
+        positions = [sub_array[i] for sub_array in optimal_positions]
+        q = positions
         self.animate(q_2=q, t_max = dt, dt = dt/100)
 
 
