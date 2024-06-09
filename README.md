@@ -16,8 +16,8 @@ This project aims to implement a robust and efficient trajectory planning and co
 
 ## General Structure
 
+- Codes:  Folder containing various scripts designed to test different functionalities of the project, including individual components of the trajectory planning pipeline with the creation of the commands.json file and scripts to visualize the full trajectory using the TOPPRA algorithm
+
 - Simulation.py: defines the simulation environment used for this project, including setting up the MuJoCo physics simulator, configuring the SOLO12 quadruped robot, and implementing all the main functions necessary for trajectory planning, optimization, and control, such as the IK Solver, TOPPRA algorithm for velocity profile generation, and animation of the robot's movements.
 - solo.py: defines a class `Robot` for handling robotic manipulator operations, including forward and inverse kinematics, joint control, and optimization for inverse kinematics.
 - Joint_positions.py: defines key points, movements, and reference configurations for a robot performing tasks such as picking up a box.
-
-- Codes:  various scripts designed to test different functionalities of the project, including individual components of the trajectory planning pipeline with the creation of the commands.json file and scripts to visualize the full trajectory using the TOPPRA algorithm
