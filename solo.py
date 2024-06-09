@@ -11,9 +11,9 @@ The `Robot` class includes the following methods:
 
 3. get_q(self): Returns the current joint positions.
 
-4. forward(self): Performs forward kinematics computation.
+4. forward(self): Performs forward kinematics computation, without consideration for dynamics and physics.
 
-5. step(self): Moves the simulation forward by one timestep.
+5. step(self): Moves the simulation forward by one timestep, with consideration for dynamics and physics.
 
 6. fk_pose(self, q=None, EE_name=None): Computes the forward kinematics pose of the end-effector.
 
