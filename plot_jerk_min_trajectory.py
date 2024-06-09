@@ -37,7 +37,7 @@ acc = []
 for idx, i in enumerate(["initial_pos", "arms_up", "via_point1_get2box","box_high", "via_point1_lift_box", "box_on_back_halfway","box_up", "box_on_back"]):
     x_des = sim.x_des(target = key_points[i])
     q = sim.inverse_kinematics_adjusted(x_des, q_ref = key_points[i]['q_ref'])
-    optimal_positions, optimal_velocities, optimal_accelerations = sim.velocity_profile(dt = 0.2, full_duration = 2, current = sim.robot.get_q(), desired=q)
+    optimal_positions, optimal_velocities, optimal_accelerations = sim.velocity_profile(dt = 0.2, full_duration = 2, current = sim.robot.get_q(), desired=q, plot = True)
     sim.animate(np.transpose(optimal_positions)[-1])
     if idx == 0:
         pos = np.copy(optimal_positions)
